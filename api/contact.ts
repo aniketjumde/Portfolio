@@ -5,6 +5,12 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
+  // Handle CORS preflight
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
@@ -13,6 +19,12 @@ export default async function handler(
 
   if (!name || !email || !message) {
     return res.status(400).json({ message: "All fields are required" });
+  }
+
+  // Basic email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: "Invalid email address" });
   }
 
   try {
@@ -30,7 +42,7 @@ export default async function handler(
     console.error("Contact API Error:", error);
     return res.status(500).json({
       success: false,
-      message: "Failed to send message",
+      message: "Failed to send message. Please try again later.",
     });
   }
 }
