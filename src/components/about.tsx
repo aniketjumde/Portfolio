@@ -6,7 +6,7 @@ const education = [
     degree: "B.Tech in Information Technology",
     school: "JSPM’s Rajarshi Shahu College of Engineering, Pune",
     year: "2023–2027",
-    grade: "8.50 CGPA",
+    grade: "8.14 CGPA",
     description: "Pursuing Bachelor's degree with a focus on software development, data structures, algorithms, and system design." },
   {
     degree: "Higher Secondary Certificate (HSC)",

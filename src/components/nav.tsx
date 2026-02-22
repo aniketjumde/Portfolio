@@ -97,7 +97,7 @@ export function Nav() {
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </Button>
             <Button size="sm" className="rounded-full bg-primary hover:bg-primary/90 text-white" asChild>
-              <a href="https://drive.google.com/file/d/1KVUn2BsmhlHPinjNnRZhveGyL2WQZ7cO/view?usp=sharing" target="_blank" rel="noopener noreferrer">Download CV</a>
+              <a href="https://drive.google.com/file/d/1j8GBOPJopC2CSvQTCcOVy2ef0t7of87l/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Download CV</a>
             </Button>
           </div>
 

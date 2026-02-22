@@ -4,16 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const projects = [
-  {
-    category: "Web Application",
-    title: "Online Examination System",
-    description: "A comprehensive platform for conducting secure online exams with real-time monitoring and automated grading.",
-    highlights: "Implemented secure user authentication and real-time timer functionality.",
-    tech: ["Java", "JSP", "MySQL", "Bootstrap"],
-    date: "Oct 2024",
-    link: "#",
-    github: "#"
-  },
+  
   {
     category: "Web Application",
     title: "Student Management System",
@@ -24,15 +15,16 @@ const projects = [
     link: "https://studentmanagmentsystem-jqqt.onrender.com/",
     github: "https://github.com/aniketjumde/Student-Managment-System"
   },
+  
   {
     category: "Web Application",
-    title: "Real Estate Management",
-    description: "Property listing platform allowing users to buy, sell, and rent properties with advanced search filters.",
-    highlights: "Integrated map view and image gallery for property listings.",
-    tech: ["MERN Stack", "Redux", "Tailwind"],
-    date: "June 2024",
-    link: "#",
-    github: "#"
+    title: "RealEstate Web Application",
+    description: "A full-stack Java-based real estate management system built using JSP/Servlets, Hibernate, MySQL, and MVC architecture, allowing users to list, browse, and manage properties with role-based access.",
+    highlights: "Role-based access (Admin/Seller/Buyer), property management, inquiry system, admin panel, dashboard analytics, Firebase authentication, MVC architecture",
+    tech: ["Java","JSP","Servlets","Hibernate","MySQL","Maven","Apache Tomcat", "JavaScript"],
+    date: "jan 2026",
+    link: "https://realestatewebapp-3wn5.onrender.com",
+    github: "https://github.com/aniketjumde/RealEstateWebApp"
   },
   {
     category: "Java",
@@ -40,7 +32,7 @@ const projects = [
     description: "A secure, enterprise-grade authentication system designed with layered architecture and robust validation workflows. The application handles user registration, login, email verification, password recovery, and complete session management while ensuring industry-standard security throughout the entire authentication flow.",
     highlights: "Used Implements a full authentication suite including registration, login, email verification, password reset, and account activation.Java Swing for GUI and JDBC for database connectivity.",
     tech: ["Java", "Servlets", "JSP", "Hibernate", "SMTP Email", "BCrypt", "MySQL"],
-    date: "Mar 2024",
+    date: "Dec 2025",
     link: "https://github.com/aniketjumde/EmailVerificationSystem",
     github: "https://github.com/aniketjumde/EmailVerificationSystem"
   },

@@ -35,7 +35,7 @@ export function Resume() {
               <div className="flex flex-wrap justify-center gap-4 mb-12">
                 <Button className="h-12 px-8 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium flex items-center gap-2">
                   <Eye className="w-4 h-4" /> 
-                  <a href="https://drive.google.com/file/d/1YQ5ET_ccHBKq8KN5ZI2H5MaHi2L7K8CZ/view?usp=drive_link" download>
+                  <a href="https://drive.google.com/file/d/1j8GBOPJopC2CSvQTCcOVy2ef0t7of87l/view?usp=drive_link" download>
                     View Resume
                   </a>
                 </Button>
