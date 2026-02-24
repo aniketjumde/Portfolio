@@ -141,7 +141,7 @@ export function Nav() {
               </Button>
             </div>
             <Button asChild className="w-full mt-2">
-              <a href="https://drive.google.com/file/d/1YQ5ET_ccHBKq8KN5ZI2H5MaHi2L7K8CZ/view?usp=drive_link" download>
+              <a href="https://drive.google.com/file/d/1j8GBOPJopC2CSvQTCcOVy2ef0t7of87l/view?usp=drive_link" download>
                 Download CV
               </a>
             </Button>

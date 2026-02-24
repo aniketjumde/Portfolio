@@ -40,7 +40,7 @@ export function Resume() {
                   </a>
                 </Button>
                 <Button variant="outline" className="h-12 px-8 rounded-lg border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300 font-medium flex items-center gap-2">
-                  <Download className="w-4 h-4" /><a href="https://drive.google.com/file/d/1YQ5ET_ccHBKq8KN5ZI2H5MaHi2L7K8CZ/view?usp=drive_link" download>
+                  <Download className="w-4 h-4" /><a href="https://drive.google.com/file/d/1j8GBOPJopC2CSvQTCcOVy2ef0t7of87l/view?usp=drive_link" download>
                     Download Resume
                   </a>
                 </Button>
