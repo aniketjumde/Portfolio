@@ -5,6 +5,8 @@ import { metrics, profile, socials } from "@/data/profile";
 import { EASE_OUT_EXPO } from "@/components/motion/easing";
 import { PosterLines } from "@/components/motion/text";
 import { usePrefersReducedMotion } from "@/hooks/use-site";
+import { Starfield } from "@/components/experience/starfield";
+import { Typewriter } from "@/components/motion/typewriter";
 import { GithubIcon, GmailIcon, LeetcodeIcon, LinkedinIcon } from "@/components/ui/brand-icons";
 
 const iconMap = {
@@ -36,6 +38,7 @@ export function Hero({ ready }: { ready: boolean }) {
     >
       {/* ── Ambient light ─────────────────────────────────── */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <Starfield className="absolute inset-0 opacity-70" />
         <div className="ambient-a absolute -left-[15%] top-[-10%] h-[38rem] w-[38rem] rounded-full bg-[hsl(var(--lime))]/[0.07] blur-[130px]" />
         <div className="ambient-b absolute right-[-10%] top-[30%] h-[32rem] w-[32rem] rounded-full bg-[hsl(220_80%_60%)]/[0.06] blur-[120px]" />
         <div className="absolute inset-0 grid-lines opacity-60" />
@@ -71,7 +74,13 @@ export function Hero({ ready }: { ready: boolean }) {
               transition={{ delay: ready ? base + 0.2 : 0.2, duration: 0.7 }}
               className="mb-5 font-mono text-[0.66rem] uppercase tracking-[0.24em] text-[hsl(var(--ash))]"
             >
-              {profile.role} <span className="text-[hsl(var(--fog))]">/</span>{" "}
+              <span className="text-[hsl(var(--chalk))]">
+                <Typewriter
+                  phrases={["Java Developer", "Problem Solver", "Backend Builder"]}
+                  startDelay={ready ? 900 : 4000}
+                />
+              </span>
+              <span className="text-[hsl(var(--fog))]"> / </span>
               {profile.discipline}
             </motion.p>
 
