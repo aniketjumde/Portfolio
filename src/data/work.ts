@@ -15,7 +15,13 @@ export interface Project {
   contribution: string[];
   tech: string[];
   demoUrl?: string;
+  /** Shown next to the demo link when the host sleeps idle instances. */
+  demoNote?: string;
   codeUrl?: string;
+  /** Which hand-built screen illustration to render */
+  mock: "records" | "form" | "dashboard" | "result";
+  /** A second screen, shown as an overlapping card for depth */
+  mockSecondary?: "records" | "form" | "dashboard" | "result";
   /** Palette + label for the CSS-drawn visual */
   visual: {
     from: string;
@@ -51,6 +57,8 @@ export const projects: Project[] = [
       "JDBC and Servlets for database connectivity and dynamic content rendering",
     ],
     tech: ["Java", "JDBC", "Servlet", "JSP", "HTML", "CSS", "JavaScript", "PostgreSQL"],
+    mock: "dashboard",
+    mockSecondary: "result",
     visual: {
       from: "#1A1F14",
       to: "#0B0B0A",
@@ -77,6 +85,10 @@ export const projects: Project[] = [
     ],
     tech: ["Java", "JDBC", "Servlet", "JSP", "Bootstrap", "PostgreSQL"],
     codeUrl: "https://github.com/aniketjumde/Student-Managment-System",
+    demoUrl: "https://studentmanagmentsystem-jqqt.onrender.com/",
+    demoNote: "Free Render instance — first load may take ~30s to wake.",
+    mock: "records",
+    mockSecondary: "form",
     visual: {
       from: "#14181F",
       to: "#0B0B0A",

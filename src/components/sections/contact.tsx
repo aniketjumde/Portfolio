@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, ArrowUpRight, Check, Copy, Loader2, Send, X } from "lucide-react";
+import { AlertCircle, Check, Copy, Loader2, Send, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { DrawLine, PosterLinesOnScroll, Rise } from "@/components/motion/text";
 import { EASE_OUT_EXPO } from "@/components/motion/easing";

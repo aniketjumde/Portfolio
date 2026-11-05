@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { Preloader } from "@/components/experience/preloader";
 import { CustomCursor } from "@/components/experience/cursor";
+import { CursorGlow } from "@/components/experience/cursor-glow";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { Hero } from "@/components/sections/hero";
@@ -18,6 +19,7 @@ export default function Home() {
     <div className="noise relative min-h-screen bg-[hsl(var(--carbon))] text-[hsl(var(--chalk))]">
       <Preloader onDone={onDone} />
       <CustomCursor />
+      <CursorGlow />
 
       <a
         href="#main"

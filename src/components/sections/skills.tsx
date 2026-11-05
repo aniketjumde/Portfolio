@@ -3,14 +3,22 @@ import { DrawLine, PosterLinesOnScroll, Rise } from "@/components/motion/text";
 import { EASE_OUT_EXPO } from "@/components/motion/easing";
 import { skillGroups } from "@/data/skills";
 import { achievements } from "@/data/credentials";
+import { SkillsSphere } from "@/components/experience/skills-sphere";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 /**
- * Skills are presented as a numbered ledger with a hover-lit index rail —
- * no progress bars, since the résumé makes no proficiency claims.
+ * Skills as an explorable object, not a list of bars.
+ *
+ * The sphere carries the breadth; the ledger underneath carries the detail.
+ * Selecting a category dims the others so a recruiter can scan vertically.
+ * No proficiency percentages — the résumé makes no such claims.
  */
 export function Skills() {
+  const [focus, setFocus] = useState<string | null>(null);
+
   return (
-    <section id="skills" className="relative">
+    <section id="skills" className="relative overflow-hidden">
       <div className="mx-auto w-full max-w-[104rem] px-5 sm:px-8">
         <DrawLine />
 
@@ -41,18 +49,67 @@ export function Skills() {
             </Rise>
           </div>
 
-          {/* Ledger */}
-          <div className="mt-12 grid gap-px border border-[hsl(var(--edge))] bg-[hsl(var(--edge))] sm:grid-cols-2 lg:grid-cols-3">
+          {/* ── Sphere + legend ─────────────────────────────── */}
+          <div className="mt-12 grid items-center gap-8 lg:grid-cols-[1fr_0.85fr] lg:gap-4">
+            <div className="relative">
+              <SkillsSphere className="mx-auto h-[19rem] w-full max-w-[26rem] sm:h-[24rem] lg:h-[27rem] lg:max-w-none" />
+            </div>
+
+            <div>
+              <p className="meta mb-3">Categories</p>
+              <ul className="border-t border-[hsl(var(--edge))]">
+                {skillGroups.map((g, i) => (
+                  <li key={g.id} className="border-b border-[hsl(var(--edge))]">
+                    <button
+                      type="button"
+                      onMouseEnter={() => setFocus(g.id)}
+                      onMouseLeave={() => setFocus(null)}
+                      onFocus={() => setFocus(g.id)}
+                      onBlur={() => setFocus(null)}
+                      className="flex w-full items-baseline gap-3 py-2.5 text-left"
+                    >
+                      <span className="font-mono text-[0.55rem] text-[hsl(var(--fog))]">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span
+                        className={cn(
+                          "font-grotesk text-[0.95rem] font-medium tracking-[-0.015em] transition-colors duration-300",
+                          focus === g.id
+                            ? "text-[hsl(var(--lime))]"
+                            : "text-[hsl(var(--chalk))]",
+                        )}
+                      >
+                        {g.title}
+                      </span>
+                      <span className="ml-auto font-mono text-[0.55rem] tabular-nums text-[hsl(var(--fog))]">
+                        {String(g.items.length).padStart(2, "0")}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 font-mono text-[0.55rem] uppercase leading-relaxed tracking-[0.14em] text-[hsl(var(--fog))]">
+                Hover a category to isolate it below
+              </p>
+            </div>
+          </div>
+
+          {/* ── Ledger ──────────────────────────────────────── */}
+          <div className="mt-4 grid gap-px border border-[hsl(var(--edge))] bg-[hsl(var(--edge))] sm:grid-cols-2 lg:grid-cols-3">
             {skillGroups.map((group, i) => (
               <motion.div
                 key={group.id}
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{ delay: i * 0.06, duration: 0.6, ease: EASE_OUT_EXPO }}
-                className="group relative bg-[hsl(var(--carbon))] p-6 transition-colors duration-500 hover:bg-[hsl(var(--carbon-2))]"
+                transition={{ delay: i * 0.05, duration: 0.6, ease: EASE_OUT_EXPO }}
+                className={cn(
+                  "group relative bg-[hsl(var(--carbon))] p-6 transition-all duration-500",
+                  focus === null || focus === group.id
+                    ? "opacity-100 hover:bg-[hsl(var(--carbon-2))]"
+                    : "opacity-35",
+                )}
               >
-                {/* lime corner mark on hover */}
                 <span
                   aria-hidden="true"
                   className="absolute right-0 top-0 h-6 w-6 origin-top-right scale-0 bg-[hsl(var(--lime))] transition-transform duration-400 group-hover:scale-100"
@@ -90,7 +147,7 @@ export function Skills() {
             ))}
           </div>
 
-          {/* Achievement strip */}
+          {/* ── Achievement strip ───────────────────────────── */}
           <div className="mt-6 grid gap-px border border-[hsl(var(--edge))] bg-[hsl(var(--edge))] sm:grid-cols-3">
             {achievements.map((a, i) => (
               <motion.div

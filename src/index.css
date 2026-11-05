@@ -110,6 +110,10 @@
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
+    .animate-caret,
+    .float-slow {
+      animation: none !important;
+    }
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
@@ -317,6 +321,20 @@
     html.has-custom-cursor, html.has-custom-cursor * { cursor: auto !important; }
   }
 }
+
+@keyframes caret-blink {
+  0%, 45% { opacity: 1; }
+  50%, 95% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-caret { animation: caret-blink 1.05s steps(1, end) infinite; }
+
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -12px, 0); }
+}
+.float-slow { animation: float-slow 9s ease-in-out infinite; }
 
 @keyframes ticker {
   from { transform: translate3d(0, 0, 0); }
