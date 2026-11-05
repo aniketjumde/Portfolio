@@ -1,56 +1,59 @@
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { Link } from "wouter";
 import { motion } from "framer-motion";
-import { EDITORIAL_EASE, MaskedLines } from "@/components/motion/primitives";
+import { EASE_OUT_EXPO } from "@/components/motion/easing";
+import { profile } from "@/data/profile";
 
 export default function NotFound() {
   return (
-    <div className="grain relative grid min-h-screen place-items-center bg-[hsl(var(--paper))] px-5 text-[hsl(var(--ink))]">
-      <motion.div
+    <div className="noise relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[hsl(var(--carbon))] px-6 text-[hsl(var(--chalk))]">
+      <div className="grid-lines pointer-events-none absolute inset-0 opacity-40" aria-hidden />
+
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
+        className="meta-lime relative"
+      >
+        Error 404 — Off the grid
+      </motion.p>
+
+      <motion.h1
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: EASE_OUT_EXPO, delay: 0.08 }}
+        className="poster-xl relative mt-4 text-center"
+      >
+        404
+      </motion.h1>
+
+      <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, ease: EDITORIAL_EASE }}
-        className="relative w-full max-w-2xl"
+        transition={{ duration: 0.7, delay: 0.3 }}
+        className="mt-4 max-w-md text-center font-grotesk text-[0.95rem] leading-relaxed text-[hsl(var(--ash))]"
       >
-        <div className="flex items-center gap-3 border-b border-[hsl(var(--rule))] pb-3">
-          <span className="tick">404</span>
-          <span className="h-px w-8 bg-[hsl(var(--oxide))]" />
-          <span className="label">Page not found</span>
-        </div>
+        This page never made it past the wireframe. The rest of {profile.name.split(" ")[0]}&apos;s
+        work is still live.
+      </motion.p>
 
-        <MaskedLines
-          as="h1"
-          delay={0.15}
-          className="display-lg mt-8"
-          lines={[
-            <span key="1">This page</span>,
-            <span key="2">
-              isn't{" "}
-              <span className="italic-accent text-[hsl(var(--oxide))]">printed</span>.
-            </span>,
-          ]}
-        />
-
-        <p className="mt-6 max-w-md text-[0.92rem] leading-relaxed text-[hsl(var(--ink-soft))]">
-          The address you followed doesn't match anything in this portfolio.
-          Everything worth reading lives on the first page.
-        </p>
-
-        <div className="mt-8 flex flex-wrap gap-3">
-          <a
-            href="/"
-            className="inline-flex items-center gap-2 bg-[hsl(var(--ink))] px-5 py-3 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-[hsl(var(--paper))] transition-colors hover:bg-[hsl(var(--oxide))]"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back to the cover
-          </a>
-          <a
-            href="/#projects"
-            className="inline-flex items-center gap-2 border border-[hsl(var(--ink))] px-5 py-3 font-mono text-[0.62rem] uppercase tracking-[0.18em] transition-colors hover:bg-[hsl(var(--ink))] hover:text-[hsl(var(--paper))]"
-          >
-            See the work
-            <ArrowUpRight className="h-3.5 w-3.5" />
-          </a>
-        </div>
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.45, ease: EASE_OUT_EXPO }}
+        className="relative mt-8 flex flex-wrap items-center justify-center gap-3"
+      >
+        <Link
+          href="/"
+          className="btn-lime inline-flex items-center justify-center px-6 py-3 font-mono text-[0.66rem] uppercase tracking-[0.18em]"
+        >
+          Return home
+        </Link>
+        <Link
+          href="/#work"
+          className="btn-ghost inline-flex items-center justify-center px-6 py-3 font-mono text-[0.66rem] uppercase tracking-[0.18em]"
+        >
+          View work
+        </Link>
       </motion.div>
     </div>
   );

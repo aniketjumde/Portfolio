@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,11 +7,10 @@
     <title>Aniket Jumde — Java Developer &amp; Problem Solver</title>
     <meta
       name="description"
-      content="Aniket Jumde — aspiring problem solver with a strong foundation in mathematics and logic, and over a year of hands-on Java experience building efficient, reliable, user-focused web applications."
+      content="Aniket Jumde — Java developer with a foundation in mathematics and logic, and over a year of hands-on experience building efficient, reliable, user-focused web applications."
     />
     <meta name="author" content="Aniket Jumde" />
-    <meta name="theme-color" content="#F4F0E7" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#12100C" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0B0B0A" />
     <link rel="canonical" href="https://aniketjumdeportfolio.vercel.app/" />
 
     <!-- Open Graph -->
@@ -20,7 +19,7 @@
     <meta property="og:title" content="Aniket Jumde — Java Developer &amp; Problem Solver" />
     <meta
       property="og:description"
-      content="Over a year of hands-on Java experience building efficient, reliable, user-focused web applications."
+      content="Over a year of hands-on Java. Multi-role web systems with relational backends, built to hold up."
     />
     <meta property="og:url" content="https://aniketjumdeportfolio.vercel.app/" />
     <meta property="og:image" content="https://aniketjumdeportfolio.vercel.app/og.png" />
@@ -33,7 +32,7 @@
     <meta name="twitter:title" content="Aniket Jumde — Java Developer &amp; Problem Solver" />
     <meta
       name="twitter:description"
-      content="Over a year of hands-on Java experience building efficient, reliable, user-focused web applications."
+      content="Over a year of hands-on Java. Multi-role web systems with relational backends, built to hold up."
     />
     <meta name="twitter:image" content="https://aniketjumdeportfolio.vercel.app/og.png" />
 
@@ -43,21 +42,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter+Tight:ital,wght@0,300..800;1,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Inter+Tight:ital,wght@0,300..800;1,300..600&family=JetBrains+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Resolve the theme before first paint (no flash) -->
+    <!-- Lock the dark theme before first paint (this identity is dark-first) -->
     <script>
       (function () {
         try {
-          var stored = localStorage.getItem("theme");
-          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-          var theme = stored === "light" || stored === "dark" ? stored : prefersDark ? "dark" : "light";
-          var root = document.documentElement;
-          root.classList.toggle("dark", theme === "dark");
-          root.classList.toggle("light", theme === "light");
-          root.style.colorScheme = theme;
+          document.documentElement.classList.add("dark");
+          document.documentElement.classList.remove("light");
+          document.documentElement.style.colorScheme = "dark";
         } catch (e) {}
       })();
     </script>
@@ -77,7 +72,7 @@
           "https://github.com/aniketjumde",
           "https://www.linkedin.com/in/aniket-jumde-74275a289/"
         ],
-        "knowsAbout": ["Java", "JSP", "Servlets", "Hibernate ORM", "PostgreSQL", "MySQL", "MongoDB", "PL/SQL", "REST APIs", "Data Structures", "Algorithms"]
+        "knowsAbout": ["Java", "JSP", "Servlets", "Hibernate ORM", "PostgreSQL", "MySQL", "MongoDB", "PL/SQL", "REST APIs", "Data Structures", "Algorithms", "Docker"]
       }
     </script>
   </head>
