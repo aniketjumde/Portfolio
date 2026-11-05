@@ -1,22 +1,13 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { ArrowDownRight, ArrowRight, Code2, MapPin, Sparkles } from "lucide-react";
-import { site, socials } from "@/data/site";
-import { allTechnologies } from "@/data/skills";
-import { stats } from "@/data/achievements";
-import { Counter } from "@/components/motion/counter";
-import { SplitText } from "@/components/motion/split-text";
-import { EASE } from "@/components/motion/reveal";
-import { Button } from "@/components/ui/button";
-import {
-  GithubIcon,
-  GmailIcon,
-  LeetcodeIcon,
-  LinkedinIcon,
-} from "@/components/ui/icons";
-import { usePrefersReducedMotion } from "@/hooks/use-portfolio";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { metrics, profile, socials } from "@/data/profile";
+import { allSkills } from "@/data/skills";
+import { EDITORIAL_EASE, MaskedLines } from "@/components/motion/primitives";
+import { usePrefersReducedMotion } from "@/hooks/use-editorial";
+import { GithubIcon, LinkedinIcon, LeetcodeIcon, GmailIcon } from "@/components/ui/brand-icons";
 
-const socialIcon = {
+const icons = {
   GitHub: GithubIcon,
   LinkedIn: LinkedinIcon,
   LeetCode: LeetcodeIcon,
@@ -24,294 +15,258 @@ const socialIcon = {
 } as const;
 
 export function Hero() {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
   const reduced = usePrefersReducedMotion();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", reduced ? "0%" : "18%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, reduced ? 1 : 0.96]);
+  const plateY = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : -70]);
+  const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
     <section
-      id="home"
+      id="introduction"
       ref={ref}
-      className="relative flex min-h-[100svh] items-center overflow-hidden pt-32 pb-20 md:pt-36"
+      className="relative min-h-[100svh] overflow-hidden pt-24 sm:pt-28"
     >
-      <motion.div style={{ y, opacity, scale }} className="w-full">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-5 sm:px-8 md:grid-cols-[1.1fr_0.9fr] md:gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
-          {/* ── Left: copy ─────────────────────────────────── */}
-          <div className="relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: EASE, delay: 0.15 }}
-              className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/[0.07] px-3.5 py-1.5 backdrop-blur-sm"
-            >
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-70" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
-              </span>
-              <span className="text-[0.72rem] font-medium uppercase tracking-[0.16em] text-primary">
-                {site.availability}
-              </span>
-            </motion.div>
-
-            <h1 className="font-display text-[clamp(2.6rem,7vw,5.2rem)] font-bold leading-[0.98] tracking-[-0.04em]">
-              <span className="block text-foreground/55">
-                <SplitText text="Hi, I build" delay={0.25} />
-              </span>
-              <span className="mt-1 block">
-                <SplitText
-                  text="software that scales."
-                  delay={0.42}
-                  accentWords={[2]}
-                />
-              </span>
-            </h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: EASE, delay: 0.85 }}
-              className="mt-7 max-w-xl text-[1.02rem] leading-relaxed text-muted-foreground sm:text-[1.08rem]"
-            >
-              I'm <span className="font-medium text-foreground">{site.name}</span>, a{" "}
-              {site.role.toLowerCase()} focused on creating scalable, high-quality
-              software. I design backends that stay clean under pressure — clean data
-              models, structured logic, and systems that hold up in production.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: EASE, delay: 1 }}
-              className="mt-9 flex flex-wrap items-center gap-3"
-            >
-              <Button asChild size="lg" variant="accent">
-                <a href="#projects">
-                  View my work
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                </a>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <a href="#contact">
-                  Let's talk
-                  <ArrowDownRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:translate-y-0.5" />
-                </a>
-              </Button>
-            </motion.div>
-
-            {/* Socials + location */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.9, ease: EASE, delay: 1.15 }}
-              className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4"
-            >
-              <div className="flex items-center gap-2">
-                {socials
-                  .filter((s) => s.label !== "Email")
-                  .map((social) => {
-                    const Icon = socialIcon[social.label as keyof typeof socialIcon];
-                    return (
-                      <a
-                        key={social.label}
-                        href={social.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={social.label}
-                        className="group grid h-10 w-10 place-items-center rounded-full border border-border/70 text-muted-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary hover:shadow-[0_10px_24px_-14px_hsl(var(--primary)/0.9)]"
-                      >
-                        <Icon className="h-4 w-4" />
-                      </a>
-                    );
-                  })}
-              </div>
-              <span className="hidden h-4 w-px bg-border sm:block" />
-              <span className="inline-flex items-center gap-1.5 text-[0.8rem] text-muted-foreground">
-                <MapPin className="h-3.5 w-3.5 text-primary/80" />
-                {site.location}
-              </span>
-            </motion.div>
-          </div>
-
-          {/* ── Right: portrait / orbit panel ──────────────── */}
-          <HeroPanel />
-        </div>
-      </motion.div>
-
-      {/* Scroll cue */}
-      <motion.a
-        href="#about"
+      {/* ── Top meta bar ─────────────────────────────────── */}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 0.8 }}
-        className="absolute bottom-7 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground/70 transition-colors hover:text-primary md:flex"
-        aria-label="Scroll to about section"
+        transition={{ delay: 0.55, duration: 0.8 }}
+        className="mx-auto w-full max-w-[104rem] px-4 sm:px-7"
       >
-        <span className="font-mono text-[0.62rem] uppercase tracking-[0.3em]">scroll</span>
-        <span className="relative block h-10 w-px overflow-hidden bg-border">
-          <motion.span
-            className="absolute inset-x-0 top-0 h-4 bg-primary"
-            animate={{ y: [-16, 40] }}
-            transition={{ duration: 1.9, repeat: Infinity, ease: "easeInOut" }}
+        <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-[hsl(var(--rule))] pb-3">
+          <span className="label">Portfolio — Vol. 01</span>
+          <span className="label hidden sm:inline">
+            {profile.location} · {profile.education}
+          </span>
+          <span className="label flex items-center gap-2">
+            <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[hsl(var(--moss))]" />
+            {profile.availability}
+          </span>
+        </div>
+      </motion.div>
+
+      {/* ── Main composition ─────────────────────────────── */}
+      <div className="mx-auto grid w-full max-w-[104rem] grid-cols-1 gap-10 px-4 pb-14 pt-8 sm:px-7 lg:grid-cols-[1.42fr_0.58fr] lg:gap-8 lg:pt-14">
+        {/* Left: type */}
+        <div className="relative">
+          <MaskedLines
+            as="h1"
+            delay={0.35}
+            stagger={0.1}
+            className="display-xl"
+            lines={[
+              <span key="a" className="block">
+                Aniket
+              </span>,
+              <span key="b" className="block">
+                Jumde<span className="text-[hsl(var(--oxide))]">.</span>
+              </span>,
+            ]}
           />
-        </span>
-      </motion.a>
-    </section>
-  );
-}
 
-function HeroPanel() {
-  const reduced = usePrefersReducedMotion();
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.94 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1.1, ease: EASE, delay: 0.5 }}
-      className="relative mx-auto hidden w-full max-w-[22rem] md:block lg:max-w-[26rem]"
-    >
-      {/* Rotating orbit ring */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-[-6%] rounded-full border border-dashed border-border/60 animate-spin-slow"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-[6%] rounded-full border border-border/40"
-      />
-
-      {/* Glass card */}
-      <div className="edge-light relative overflow-hidden rounded-[2rem] border border-border/80 bg-card/60 p-7 shadow-[0_40px_100px_-40px_rgba(0,0,0,0.9)] backdrop-blur-xl">
-        <div
-          aria-hidden="true"
-          className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/25 blur-[70px]"
-        />
-
-        {/* Availability row */}
-        <div className="relative flex items-center justify-between">
-          <span className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-muted-foreground">
-            profile.json
-          </span>
-          <span className="flex gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-[hsl(0_70%_58%)]/70" />
-            <span className="h-2 w-2 rounded-full bg-[hsl(40_90%_58%)]/70" />
-            <span className="h-2 w-2 rounded-full bg-[hsl(150_60%_50%)]/70" />
-          </span>
-        </div>
-
-        <div className="relative mt-6 flex items-center gap-4">
-          <div className="relative grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-[linear-gradient(140deg,hsl(var(--jade)/0.22),hsl(var(--cyan)/0.14))] font-display text-xl font-bold text-foreground ring-1 ring-inset ring-white/15">
-            {site.initials}
-            <Sparkles className="absolute -right-1.5 -top-1.5 h-4 w-4 text-accent animate-float" />
-          </div>
-          <div>
-            <p className="font-display text-lg font-semibold leading-tight">{site.name}</p>
-            <p className="mt-0.5 text-[0.8rem] text-muted-foreground">{site.role}</p>
-          </div>
-        </div>
-
-        {/* Code-ish block */}
-        <div className="relative mt-6 rounded-2xl border border-border/60 bg-background/60 p-4 font-mono text-[0.72rem] leading-relaxed">
-          <p className="text-muted-foreground/60">
-            <span className="text-violet">const</span> engineer = {"{"}
-          </p>
-          <p className="pl-4 text-muted-foreground">
-            focus: <span className="text-primary">"backend"</span>,
-          </p>
-          <p className="pl-4 text-muted-foreground">
-            stack: <span className="text-accent">"java + sql"</span>,
-          </p>
-          <p className="pl-4 text-muted-foreground">
-            shipping: <span className="text-[hsl(40_90%_62%)]">true</span>,
-          </p>
-          <p className="text-muted-foreground/60">{"}"};</p>
-        </div>
-
-        {/* Mini stats */}
-        <div className="relative mt-6 grid grid-cols-3 gap-2">
-          {[
-            { value: stats.problems, label: "Problems" },
-            { value: `${stats.certifications}`, label: "Certs" },
-            { value: `${stats.cgpa}`, label: "CGPA" },
-          ].map((item) => (
-            <div
-              key={item.label}
-              className="rounded-xl border border-border/60 bg-secondary/40 px-2 py-2.5 text-center"
+          <div className="mt-6 grid gap-6 sm:grid-cols-[auto_1fr] sm:gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.95, duration: 0.7, ease: EDITORIAL_EASE }}
+              className="flex flex-col justify-center gap-1 border-l-2 border-[hsl(var(--oxide))] pl-4"
             >
-              <p className="font-display text-[0.95rem] font-semibold text-foreground">
-                {item.value}
-              </p>
-              <p className="mt-0.5 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-muted-foreground">
-                {item.label}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
+              <span className="font-mono text-[0.66rem] uppercase tracking-[0.22em] text-[hsl(var(--ink-faint))]">
+                Discipline
+              </span>
+              <span className="font-display text-[1.15rem] font-semibold leading-tight">
+                Java Development
+              </span>
+              <span className="font-display text-[1.15rem] font-semibold italic leading-tight text-[hsl(var(--ink-soft))]">
+                &amp; Problem Solving
+              </span>
+            </motion.div>
 
-      {/* Floating badge — languages */}
-      <motion.div
-        animate={reduced ? undefined : { y: [-6, 6, -6] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -left-3 top-1/3 flex items-center gap-2 rounded-2xl border border-border/80 bg-card/90 px-3 py-2 shadow-xl backdrop-blur-md lg:-left-8 lg:px-3.5 lg:py-2.5"
-      >
-        <Code2 className="h-4 w-4 text-primary" />
-        <div>
-          <p className="font-mono text-[0.55rem] uppercase tracking-[0.14em] text-muted-foreground">
-            Languages
-          </p>
-          <p className="text-[0.78rem] font-semibold">{stats.languages}+</p>
-        </div>
-      </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.05, duration: 0.8, ease: EDITORIAL_EASE }}
+              className="max-w-md text-[0.98rem] leading-[1.65] text-[hsl(var(--ink-soft))]"
+            >
+              {profile.standfirst}
+            </motion.p>
+          </div>
 
-      {/* Floating badge — counter */}
-      <motion.div
-        animate={reduced ? undefined : { y: [6, -6, 6] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -right-2 bottom-[18%] rounded-2xl border border-border/80 bg-card/90 px-3 py-2 shadow-xl backdrop-blur-md lg:-right-6 lg:px-4 lg:py-2.5"
-      >
-        <p className="font-mono text-[0.55rem] uppercase tracking-[0.14em] text-muted-foreground">
-          LeetCode
-        </p>
-        <p className="font-display text-[0.95rem] font-semibold text-primary">
-          <Counter to={200} suffix="+" duration={2.2} />
-        </p>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-/** Thin marquee of technologies that sits at the base of the hero. */
-export function TechMarquee() {
-  const items = [...allTechnologies, ...allTechnologies];
-
-  return (
-    <div className="relative mt-4 border-y border-border/50 bg-card/25 py-3.5 backdrop-blur-sm">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent"
-      />
-      <div className="flex w-max animate-marquee items-center gap-8 whitespace-nowrap">
-        {items.map((tech, i) => (
-          <span
-            key={`${tech}-${i}`}
-            className="flex items-center gap-8 font-mono text-[0.72rem] uppercase tracking-[0.16em] text-muted-foreground/70"
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 0.7, ease: EDITORIAL_EASE }}
+            className="mt-9 flex flex-wrap items-center gap-3"
           >
-            {tech}
-            <span className="h-1 w-1 rounded-full bg-primary/50" />
-          </span>
-        ))}
+            <a
+              href="#projects"
+              className="group inline-flex items-center gap-3 bg-[hsl(var(--ink))] px-6 py-3.5 font-mono text-[0.64rem] uppercase tracking-[0.18em] text-[hsl(var(--paper))] transition-colors duration-300 hover:bg-[hsl(var(--oxide))]"
+            >
+              View projects
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+            <a
+              href={profile.resumeUrl}
+              download
+              className="group inline-flex items-center gap-3 border border-[hsl(var(--ink))] px-6 py-3.5 font-mono text-[0.64rem] uppercase tracking-[0.18em] transition-colors duration-300 hover:bg-[hsl(var(--ink))] hover:text-[hsl(var(--paper))]"
+            >
+              Download résumé
+              <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5" />
+            </a>
+          </motion.div>
+
+          {/* Socials */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.35, duration: 0.8 }}
+            className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-[hsl(var(--rule))] pt-4"
+          >
+            {socials.map((social) => {
+              const Icon = icons[social.label as keyof typeof icons];
+              return (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target={social.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  aria-label={`${social.label} — ${social.handle}`}
+                  className="group inline-flex items-center gap-1.5 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-[hsl(var(--ink-faint))] transition-colors hover:text-[hsl(var(--ink))]"
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  <span className="link-ink">{social.label}</span>
+                </a>
+              );
+            })}
+          </motion.div>
+        </div>
+
+        {/* Right: portrait plate + metrics */}
+        <motion.aside
+          style={{ y: plateY }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7, duration: 1 }}
+          className="relative flex flex-col justify-between gap-6"
+        >
+          {/* The "plate": a printed portrait card, drawn in CSS */}
+          <div className="relative mx-auto w-full max-w-[19rem] lg:mx-0">
+            <div className="relative border border-[hsl(var(--ink))] bg-[hsl(var(--paper-2))] p-3">
+              {/* registration marks */}
+              {[
+                "left-1.5 top-1.5",
+                "right-1.5 top-1.5",
+                "left-1.5 bottom-1.5",
+                "right-1.5 bottom-1.5",
+              ].map((pos) => (
+                <span
+                  key={pos}
+                  aria-hidden="true"
+                  className={`absolute ${pos} h-2 w-2 border border-[hsl(var(--ink-faint))]`}
+                />
+              ))}
+
+              <div className="relative overflow-hidden border border-[hsl(var(--rule))] bg-[hsl(var(--ink))]">
+                <div className="aspect-[4/5] relative grid place-items-center">
+                  {/* concentric ring composition */}
+                  <div aria-hidden="true" className="absolute inset-0">
+                    {[0.92, 0.72, 0.52, 0.34].map((scale, i) => (
+                      <motion.div
+                        key={scale}
+                        initial={{ opacity: 0, scale: 0.85 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.9 + i * 0.09, duration: 1.1, ease: EDITORIAL_EASE }}
+                        className="absolute left-1/2 top-1/2 rounded-full border border-[hsl(var(--paper))]/18"
+                        style={{
+                          width: `${scale * 100}%`,
+                          aspectRatio: "1",
+                          transform: "translate(-50%, -50%)",
+                        }}
+                      />
+                    ))}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,hsl(var(--oxide)/0.35),transparent_62%)]" />
+                  </div>
+
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1.1, duration: 1, ease: EDITORIAL_EASE }}
+                    className="relative font-display text-[5.5rem] font-semibold leading-none text-[hsl(var(--paper))]"
+                  >
+                    {profile.initials}
+                  </motion.span>
+
+                  {/* spine label */}
+                  <span className="absolute bottom-3 left-3 font-mono text-[0.52rem] uppercase tracking-[0.24em] text-[hsl(var(--paper))]/55">
+                    {profile.role}
+                  </span>
+                  <span className="absolute right-3 top-3 font-mono text-[0.52rem] tracking-[0.1em] text-[hsl(var(--paper))]/40">
+                    EST. 2023
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-3 flex items-baseline justify-between">
+                <span className="font-mono text-[0.55rem] uppercase tracking-[0.16em] text-[hsl(var(--ink-faint))]">
+                  Fig. 01 — The developer
+                </span>
+                <span className="font-mono text-[0.55rem] text-[hsl(var(--ink-faint))]">
+                  {profile.location.split(",")[0]}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Metrics ledger */}
+          <div className="grid grid-cols-2 gap-px border border-[hsl(var(--rule))] bg-[hsl(var(--rule))]">
+            {metrics.map((m, i) => (
+              <motion.div
+                key={m.label}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.25 + i * 0.08, duration: 0.6 }}
+                className="bg-[hsl(var(--paper))] px-3.5 py-3"
+              >
+                <p className="font-display text-[1.5rem] font-semibold leading-none">{m.value}</p>
+                <p className="mt-1.5 font-mono text-[0.54rem] uppercase tracking-[0.14em] text-[hsl(var(--ink-faint))]">
+                  {m.label}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.aside>
       </div>
-    </div>
+
+      {/* ── Scroll indicator ─────────────────────────────── */}
+      <motion.div style={{ opacity: fade }} className="mx-auto w-full max-w-[104rem] px-4 sm:px-7">
+        <a
+          href="#about"
+          className="group flex items-center justify-between gap-4 border-t border-[hsl(var(--rule))] py-4"
+          aria-label="Scroll to about section"
+        >
+          <span className="flex items-center gap-3">
+            <motion.span
+              animate={reduced ? undefined : { y: [0, 5, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="grid h-7 w-7 place-items-center border border-[hsl(var(--rule))] text-[hsl(var(--ink-faint))] transition-colors group-hover:border-[hsl(var(--oxide))] group-hover:text-[hsl(var(--oxide))]"
+            >
+              <ArrowDown className="h-3 w-3" />
+            </motion.span>
+            <span className="font-mono text-[0.58rem] uppercase tracking-[0.24em] text-[hsl(var(--ink-faint))]">
+              Scroll to read
+            </span>
+          </span>
+          <span className="hidden font-mono text-[0.58rem] uppercase tracking-[0.18em] text-[hsl(var(--ink-faint))] sm:block">
+            {allSkills.slice(0, 5).join(" · ")}
+          </span>
+        </a>
+      </motion.div>
+    </section>
   );
 }

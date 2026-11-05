@@ -1,136 +1,124 @@
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { Briefcase, CheckCircle2, GraduationCap, Sparkles } from "lucide-react";
-import { Section, SectionHeading } from "@/components/ui/section";
-import { Reveal, EASE } from "@/components/motion/reveal";
-import { experience } from "@/data/experience";
+import { DrawRule, MaskedLines, Reveal } from "@/components/motion/primitives";
+import { SectionHeader } from "@/components/ui/section-header";
+import { timeline } from "@/data/timeline";
 import { cn } from "@/lib/utils";
 
-const typeIcon = {
-  Education: GraduationCap,
-  Project: Briefcase,
-  Certification: Sparkles,
-} as const;
-
 export function Experience() {
-  const trackRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: trackRef,
-    offset: ["start 75%", "end 55%"],
+    target: ref,
+    offset: ["start 70%", "end 60%"],
   });
-  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.4 });
-  const scaleY = useTransform(progress, [0, 1], [0, 1]);
+  const progress = useSpring(scrollYProgress, { stiffness: 80, damping: 24, mass: 0.4 });
+  const height = useTransform(progress, [0, 1], ["0%", "100%"]);
 
   return (
-    <Section id="experience" divided>
-      <SectionHeading
-        eyebrow="03 — Timeline"
-        title="A record of"
-        accent="deliberate practice"
-        description="No employment history yet — but a consistent record of shipping complete systems alongside a full-time degree."
-      />
+    <section id="experience" className="relative">
+      <div className="mx-auto w-full max-w-[104rem] px-4 sm:px-7">
+        <DrawRule />
 
-      <div ref={trackRef} className="relative mt-14 pl-8 sm:pl-0">
-        {/* Rail */}
-        <div
-          aria-hidden="true"
-          className="absolute left-[7px] top-2 h-full w-px bg-border/70 sm:left-1/2 sm:-translate-x-1/2"
-        >
-          <motion.div
-            style={{ scaleY }}
-            className="h-full w-full origin-top bg-[linear-gradient(180deg,hsl(var(--jade)),hsl(var(--cyan)),hsl(var(--violet)))]"
-          />
-        </div>
+        <div className="py-14 lg:py-20">
+          <div className="grid gap-8 lg:grid-cols-[0.34fr_0.66fr] lg:gap-16">
+            <div>
+              <SectionHeader index="04" title="Experience & Education" />
+              <MaskedLines
+                as="h3"
+                delay={0.1}
+                className="display-lg mt-6"
+                lines={[
+                  <span key="1">Study, practice,</span>,
+                  <span key="2">
+                    <span className="italic-accent text-[hsl(var(--oxide))]">repeat</span>.
+                  </span>,
+                ]}
+              />
+              <Reveal delay={0.15}>
+                <p className="mt-4 max-w-sm text-[0.88rem] leading-relaxed text-[hsl(var(--ink-soft))]">
+                  A degree in progress alongside continuous applied development — the
+                  record behind the one-year-plus of hands-on Java.
+                </p>
+              </Reveal>
+            </div>
 
-        <ol className="space-y-10 sm:space-y-0">
-          {experience.map((item, index) => {
-            const Icon = typeIcon[item.type];
-            const isLeft = index % 2 === 0;
-
-            return (
-              <li
-                key={`${item.title}-${item.period}`}
-                className={cn(
-                  "relative sm:grid sm:grid-cols-2 sm:gap-12",
-                  index > 0 && "sm:pt-14",
-                )}
+            <div ref={ref} className="relative">
+              {/* Rail */}
+              <div
+                aria-hidden="true"
+                className="absolute left-[3px] top-2 h-full w-px bg-[hsl(var(--rule))] sm:left-[5px]"
               >
-                {/* Node */}
-                <span
-                  aria-hidden="true"
-                  className="absolute -left-8 top-1.5 z-10 grid h-4 w-4 place-items-center sm:left-1/2 sm:-translate-x-1/2"
-                >
-                  <motion.span
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    viewport={{ once: true, amount: 0.8 }}
-                    transition={{ duration: 0.5, ease: EASE, delay: 0.1 }}
-                    className="grid h-4 w-4 place-items-center rounded-full border-2 border-primary bg-background"
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  </motion.span>
-                </span>
+                <motion.div
+                  style={{ height }}
+                  className="w-full bg-[hsl(var(--oxide))]"
+                />
+              </div>
 
-                {/* Card */}
-                <div
-                  className={cn(
-                    isLeft ? "sm:col-start-1 sm:pr-4" : "sm:col-start-2 sm:pl-4",
-                  )}
-                >
-                  <Reveal y={22} delay={0.05}>
-                    <motion.article
-                      whileHover={{ y: -4 }}
-                      transition={{ duration: 0.35, ease: EASE }}
-                      className="surface surface-hover group relative overflow-hidden rounded-2xl p-6"
-                    >
-                      <div
-                        aria-hidden="true"
-                        className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                      />
+              <ol className="space-y-9 pl-7 sm:pl-10">
+                {timeline.map((item, i) => (
+                  <li key={`${item.title}-${item.period}`} className="relative">
+                    <motion.span
+                      aria-hidden="true"
+                      initial={{ scale: 0 }}
+                      whileInView={{ scale: 1 }}
+                      viewport={{ once: true, amount: 0.8 }}
+                      transition={{ duration: 0.45, delay: 0.05 }}
+                      className={cn(
+                        "absolute -left-7 top-2 h-2 w-2 rounded-full sm:-left-10",
+                        item.kind === "Practice"
+                          ? "bg-[hsl(var(--oxide))] ring-4 ring-[hsl(var(--oxide))]/15"
+                          : "border border-[hsl(var(--ink))] bg-[hsl(var(--paper))]",
+                      )}
+                    />
 
-                      <div className="mb-3 flex flex-wrap items-center gap-2">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/[0.08] px-2.5 py-1 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-primary">
-                          <Icon className="h-3 w-3" />
-                          {item.type}
-                        </span>
-                        <span className="font-mono text-[0.66rem] tracking-wide text-muted-foreground">
-                          {item.period}
-                        </span>
-                        {item.grade && (
-                          <span className="ml-auto rounded-full border border-border/70 bg-secondary/60 px-2.5 py-1 text-[0.66rem] font-medium text-foreground/80">
-                            {item.grade}
+                    <Reveal y={18} delay={i * 0.04}>
+                      <div className="group">
+                        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                          <span className="font-mono text-[0.6rem] uppercase tracking-[0.18em] text-[hsl(var(--oxide))]">
+                            {item.period}
                           </span>
+                          <span className="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-[hsl(var(--ink-faint))]">
+                            {item.kind}
+                          </span>
+                          {item.metric && (
+                            <span className="ml-auto border border-[hsl(var(--rule))] px-2 py-0.5 font-mono text-[0.58rem] tracking-[0.06em] text-[hsl(var(--ink-soft))]">
+                              {item.metric}
+                            </span>
+                          )}
+                        </div>
+
+                        <h4 className="mt-2 font-display text-[1.25rem] font-semibold leading-snug transition-colors duration-300 group-hover:text-[hsl(var(--oxide))] sm:text-[1.4rem]">
+                          {item.title}
+                        </h4>
+                        <p className="mt-1 text-[0.84rem] text-[hsl(var(--ink-soft))]">
+                          {item.org}
+                        </p>
+                        <p className="mt-2.5 max-w-xl text-[0.86rem] leading-relaxed text-[hsl(var(--ink-soft))]">
+                          {item.summary}
+                        </p>
+
+                        {item.notes.length > 0 && (
+                          <ul className="mt-3 space-y-1.5">
+                            {item.notes.map((note) => (
+                              <li
+                                key={note}
+                                className="flex gap-2.5 text-[0.82rem] leading-relaxed text-[hsl(var(--ink-soft))]"
+                              >
+                                <span className="mt-[0.5em] h-px w-3 shrink-0 bg-[hsl(var(--ink-faint))]" />
+                                {note}
+                              </li>
+                            ))}
+                          </ul>
                         )}
                       </div>
-
-                      <h3 className="font-display text-[1.05rem] font-semibold leading-snug">
-                        {item.title}
-                      </h3>
-                      <p className="mt-1 text-[0.82rem] text-muted-foreground">
-                        {item.org}
-                        {item.location && ` · ${item.location}`}
-                      </p>
-
-                      <p className="mt-3 text-[0.82rem] leading-relaxed text-muted-foreground">
-                        {item.summary}
-                      </p>
-
-                      <ul className="mt-4 space-y-2">
-                        {item.points.map((point) => (
-                          <li key={point} className="flex gap-2.5 text-[0.79rem] leading-relaxed text-muted-foreground">
-                            <CheckCircle2 className="mt-[3px] h-3.5 w-3.5 shrink-0 text-primary/70" />
-                            <span>{point}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </motion.article>
-                  </Reveal>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
+                    </Reveal>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }

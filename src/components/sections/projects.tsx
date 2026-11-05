@@ -1,284 +1,262 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ArrowUpRight, Check, ExternalLink, Layers } from "lucide-react";
-import { useState } from "react";
-import { Section, SectionHeading } from "@/components/ui/section";
-import { Reveal, EASE } from "@/components/motion/reveal";
-import { projects, type Project } from "@/data/projects";
-import { Button } from "@/components/ui/button";
-import { GithubIcon } from "@/components/ui/icons";
-import { cn } from "@/lib/utils";
-import { usePrefersReducedMotion } from "@/hooks/use-portfolio";
-
-const filters = [
-  { id: "all", label: "All work" },
-  { id: "Web Application", label: "Web apps" },
-  { id: "Java", label: "Java" },
-] as const;
-
-type FilterId = (typeof filters)[number]["id"];
+import { ArrowUpRight, ExternalLink } from "lucide-react";
+import { useRef, useState } from "react";
+import { DrawRule, MaskedLines, Reveal } from "@/components/motion/primitives";
+import { SectionHeader } from "@/components/ui/section-header";
+import { projects, type Project } from "@/data/work";
+import { GithubIcon } from "@/components/ui/brand-icons";
+import { usePrefersReducedMotion } from "@/hooks/use-editorial";
+import { EDITORIAL_EASE } from "@/components/motion/primitives";
 
 export function Projects() {
-  const [filter, setFilter] = useState<FilterId>("all");
-  const visible = projects.filter((p) => (filter === "all" ? true : p.category === filter));
-
   return (
-    <Section id="projects" divided>
-      <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-        <SectionHeading
-          eyebrow="04 — Selected work"
-          title="Systems built end to end,"
-          accent="not tutorials"
-          description="Every project below is deployed or open-source. Data models, service layers, role logic and deployment are all mine."
-        />
+    <section id="projects" className="relative">
+      <div className="mx-auto w-full max-w-[104rem] px-4 sm:px-7">
+        <DrawRule />
 
-        <Reveal delay={0.1}>
-          <div
-            role="tablist"
-            aria-label="Filter projects"
-            className="inline-flex rounded-full border border-border/80 bg-card/50 p-1 backdrop-blur-sm"
-          >
-            {filters.map((f) => {
-              const isActive = filter === f.id;
-              return (
-                <button
-                  key={f.id}
-                  role="tab"
-                  type="button"
-                  aria-selected={isActive}
-                  onClick={() => setFilter(f.id)}
-                  className={cn(
-                    "relative rounded-full px-4 py-1.5 text-[0.78rem] font-medium transition-colors duration-300",
-                    isActive ? "text-background" : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  {isActive && (
-                    <motion.span
-                      layoutId="project-filter"
-                      transition={{ type: "spring", stiffness: 400, damping: 34 }}
-                      className="absolute inset-0 -z-10 rounded-full bg-foreground"
-                    />
-                  )}
-                  {f.label}
-                </button>
-              );
-            })}
-          </div>
-        </Reveal>
-      </div>
-
-      <div className="mt-12 grid gap-5">
-        {visible.map((project, index) => (
-          <ProjectCard key={project.slug} project={project} index={index} />
-        ))}
-      </div>
-
-      {visible.length === 0 && (
-        <div className="mt-12 rounded-2xl border border-dashed border-border/70 p-12 text-center text-muted-foreground">
-          Nothing in this category yet.
-        </div>
-      )}
-
-      <Reveal delay={0.15} className="mt-10">
-        <div className="flex flex-col items-start justify-between gap-5 rounded-[1.5rem] border border-border/70 bg-card/40 p-6 backdrop-blur-sm sm:flex-row sm:items-center">
-          <div className="flex items-center gap-4">
-            <span className="grid h-11 w-11 place-items-center rounded-2xl border border-border/70 text-primary">
-              <Layers className="h-5 w-5" />
-            </span>
+        <div className="py-14 lg:py-20">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-[0.9rem] font-semibold">More on GitHub</p>
-              <p className="text-[0.79rem] text-muted-foreground">
-                Experiments, course work and the rest of the open-source trail.
-              </p>
+              <SectionHeader index="05" title="Selected Projects" />
+              <MaskedLines
+                as="h3"
+                delay={0.1}
+                className="display-lg mt-6 max-w-2xl"
+                lines={[
+                  <span key="1">Two systems,</span>,
+                  <span key="2">
+                    built to{" "}
+                    <span className="italic-accent text-[hsl(var(--oxide))]">hold up</span>.
+                  </span>,
+                ]}
+              />
             </div>
+            <Reveal delay={0.15}>
+              <p className="max-w-xs text-[0.86rem] leading-relaxed text-[hsl(var(--ink-soft))]">
+                Both taken from the résumé — Java web applications with relational
+                backends, multi-role access and real CRUD requirements.
+              </p>
+            </Reveal>
           </div>
-          <Button asChild variant="outline" size="sm">
-            <a
-              href="https://github.com/aniketjumde"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <GithubIcon className="h-3.5 w-3.5" />
-              github.com/aniketjumde
-              <ArrowUpRight className="h-3.5 w-3.5" />
-            </a>
-          </Button>
+
+          <div className="mt-12 space-y-6">
+            {projects.map((project, i) => (
+              <ProjectRow key={project.slug} project={project} index={i} />
+            ))}
+          </div>
         </div>
-      </Reveal>
-    </Section>
+      </div>
+    </section>
   );
 }
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function ProjectRow({ project, index }: { project: Project; index: number }) {
   const reduced = usePrefersReducedMotion();
   const [hovered, setHovered] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  // Subtle 3D tilt driven by pointer position
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
-  const rotateX = useSpring(useTransform(my, [0, 1], [4, -4]), {
-    stiffness: 200,
-    damping: 24,
+  const rotateX = useSpring(useTransform(my, [0, 1], [3, -3]), {
+    stiffness: 180,
+    damping: 22,
   });
-  const rotateY = useSpring(useTransform(mx, [0, 1], [-5, 5]), {
-    stiffness: 200,
-    damping: 24,
+  const rotateY = useSpring(useTransform(mx, [0, 1], [-4, 4]), {
+    stiffness: 180,
+    damping: 22,
   });
 
-  const showTilt = !reduced && hovered;
+  const flip = index % 2 === 1;
 
   return (
-    <Reveal y={30} delay={index * 0.06}>
-      <motion.article
-        onMouseMove={(e) => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          mx.set((e.clientX - rect.left) / rect.width);
-          my.set((e.clientY - rect.top) / rect.height);
-        }}
+    <Reveal y={30}>
+      <article
+        className="group relative border border-[hsl(var(--rule))] bg-[hsl(var(--paper-2))] transition-colors duration-500 hover:border-[hsl(var(--ink))]"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => {
           setHovered(false);
           mx.set(0.5);
           my.set(0.5);
         }}
-        style={showTilt ? { rotateX, rotateY, transformPerspective: 1200 } : undefined}
-        className={cn(
-          "conic-border group relative overflow-hidden rounded-[1.5rem] border border-border/80 bg-card/55 backdrop-blur-xl transition-colors duration-500 hover:bg-card/80",
-          project.featured && "border-border",
-        )}
+        onMouseMove={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          mx.set((e.clientX - rect.left) / rect.width);
+          my.set((e.clientY - rect.top) / rect.height);
+        }}
       >
-        <div className="grid lg:grid-cols-[0.5fr_0.5fr]">
-          {/* ── Cover ─────────────────────────────────────── */}
-          <div
-            className={cn(
-              "relative order-1 overflow-hidden",
-              project.featured ? "lg:order-1" : "lg:order-1",
-            )}
-          >
-            <ProjectCover project={project} />
+        <div
+          className={`grid lg:grid-cols-2 ${flip ? "lg:[&>*:first-child]:order-2" : ""}`}
+        >
+          {/* ── Plate ─────────────────────────────────────── */}
+          <div className="relative overflow-hidden border-b border-[hsl(var(--rule))] lg:border-b-0 lg:border-r">
+            <motion.div
+              style={
+                !reduced && hovered
+                  ? { rotateX, rotateY, transformPerspective: 1400 }
+                  : undefined
+              }
+              className="h-full"
+            >
+              <ProjectPlate project={project} />
+            </motion.div>
+
+            <span className="absolute left-3 top-3 font-mono text-[0.58rem] tracking-[0.16em] text-white/45">
+              FIG. {project.index}
+            </span>
           </div>
 
-          {/* ── Body ──────────────────────────────────────── */}
-          <div className="order-2 flex flex-col p-6 sm:p-8">
-            <div className="mb-4 flex items-center gap-2.5">
-              <span className="rounded-full border border-primary/25 bg-primary/[0.08] px-2.5 py-1 font-mono text-[0.58rem] uppercase tracking-[0.16em] text-primary">
-                {project.kicker}
+          {/* ── Detail ────────────────────────────────────── */}
+          <div className="flex flex-col p-6 sm:p-8 lg:p-10">
+            <div className="flex items-baseline gap-3">
+              <span className="tick">{project.index}</span>
+              <span className="font-mono text-[0.58rem] uppercase tracking-[0.18em] text-[hsl(var(--ink-faint))]">
+                {project.year} · {project.role}
               </span>
-              <span className="font-mono text-[0.62rem] text-muted-foreground/70">
-                {project.date}
-              </span>
-              {project.featured && (
-                <span className="ml-auto hidden items-center gap-1 rounded-full border border-border/70 px-2 py-0.5 text-[0.58rem] uppercase tracking-[0.1em] text-muted-foreground sm:inline-flex">
-                  Flagship
-                </span>
-              )}
             </div>
 
-            <h3 className="font-display text-[1.35rem] font-semibold leading-tight transition-colors duration-300 group-hover:text-primary sm:text-[1.5rem]">
+            <h4 className="mt-3 font-display text-[1.7rem] font-semibold leading-[1.05] tracking-tight sm:text-[2.1rem]">
               {project.title}
-            </h3>
-
-            <p className="mt-3 text-[0.86rem] leading-relaxed text-muted-foreground">
-              {project.description}
+            </h4>
+            <p className="mt-1.5 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[hsl(var(--oxide))]">
+              {project.kicker}
             </p>
 
-            <ul className="mt-4 space-y-1.5">
+            <p className="mt-5 max-w-prose text-[0.9rem] leading-[1.7] text-[hsl(var(--ink-soft))]">
+              {project.summary}
+            </p>
+
+            <ul className="mt-5 space-y-2">
               {project.highlights.map((h) => (
-                <li key={h} className="flex gap-2 text-[0.78rem] leading-relaxed text-muted-foreground/90">
-                  <Check className="mt-[3px] h-3.5 w-3.5 shrink-0 text-primary/70" />
-                  <span>{h}</span>
+                <li
+                  key={h}
+                  className="flex gap-3 text-[0.83rem] leading-relaxed text-[hsl(var(--ink-soft))]"
+                >
+                  <span className="mt-[0.62em] h-1 w-1 shrink-0 rounded-full bg-[hsl(var(--oxide))]" />
+                  {h}
                 </li>
               ))}
             </ul>
 
-            <div className="mt-5 flex flex-wrap gap-1.5">
-              {project.tech.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-md border border-border/60 bg-secondary/40 px-2 py-0.5 font-mono text-[0.62rem] text-muted-foreground"
-                >
-                  {t}
-                </span>
-              ))}
+            {/* Stack */}
+            <div className="mt-6">
+              <p className="label mb-2">Stack</p>
+              <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+                {project.tech.map((t) => (
+                  <span
+                    key={t}
+                    className="font-mono text-[0.66rem] tracking-[0.04em] text-[hsl(var(--ink-soft))]"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
             </div>
 
-            <div className="mt-auto flex flex-wrap items-center gap-2.5 pt-6">
-              <Button asChild size="sm" variant="default">
+            {/* Actions */}
+            <div className="mt-auto flex flex-wrap items-center gap-2 pt-7">
+              {project.demoUrl ? (
                 <a
                   href={project.demoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`Open live demo of ${project.title}`}
+                  className="group/btn inline-flex items-center gap-2 border border-[hsl(var(--ink))] bg-[hsl(var(--ink))] px-4 py-2.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-[hsl(var(--paper))] transition-colors hover:bg-[hsl(var(--oxide))] hover:border-[hsl(var(--oxide))]"
                 >
-                  <ExternalLink className="h-3.5 w-3.5" />
+                  <ExternalLink className="h-3 w-3" />
                   Live demo
                 </a>
-              </Button>
-              <Button asChild size="sm" variant="outline">
+              ) : (
+                <span className="inline-flex items-center gap-2 border border-dashed border-[hsl(var(--rule))] px-4 py-2.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-[hsl(var(--ink-faint))]">
+                  Live demo on request
+                </span>
+              )}
+
+              {project.codeUrl && (
                 <a
                   href={project.codeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`View source code for ${project.title}`}
+                  className="inline-flex items-center gap-2 border border-[hsl(var(--rule))] px-4 py-2.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-[hsl(var(--ink-soft))] transition-colors hover:border-[hsl(var(--ink))] hover:text-[hsl(var(--ink))]"
                 >
-                  <GithubIcon className="h-3.5 w-3.5" />
+                  <GithubIcon className="h-3 w-3" />
                   Source
                 </a>
-              </Button>
+              )}
             </div>
           </div>
         </div>
-      </motion.article>
+      </article>
     </Reveal>
   );
 }
 
 /**
- * Abstract, CSS-only "screenshot". Keeps the page weightless while still
- * giving each project a distinct visual identity.
+ * A printed plate for each project, drawn entirely in CSS/SVG — a mock
+ * browser window over a flat colour field, with an offset duotone block.
  */
-function ProjectCover({ project }: { project: Project }) {
-  const { from, to, mock } = project.cover;
+function ProjectPlate({ project }: { project: Project }) {
+  const { bg, accent, mono } = project.plate;
 
   return (
     <div
-      className="relative h-full min-h-[15rem] overflow-hidden"
-      style={{ background: `linear-gradient(145deg, ${from} 0%, ${to} 100%)` }}
+      className="relative min-h-[17rem] overflow-hidden p-5 sm:p-7"
+      style={{ backgroundColor: bg }}
       aria-hidden="true"
     >
-      {/* Grid overlay */}
-      <div className="absolute inset-0 bg-grid opacity-[0.18]" />
-      {/* Glow */}
-      <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/20 blur-[60px]" />
+      {/* offset duotone block */}
+      <div
+        className="absolute -right-10 -top-10 h-40 w-40 opacity-20"
+        style={{ backgroundColor: accent }}
+      />
+      <div
+        className="absolute -bottom-14 -left-8 h-32 w-32 opacity-10"
+        style={{ backgroundColor: accent }}
+      />
 
-      {/* Browser chrome */}
-      <div className="absolute inset-x-6 top-7 overflow-hidden rounded-xl border border-white/15 bg-black/25 shadow-2xl backdrop-blur-sm">
-        <div className="flex items-center gap-1.5 border-b border-white/10 px-3 py-2">
-          <span className="h-2 w-2 rounded-full bg-white/35" />
-          <span className="h-2 w-2 rounded-full bg-white/25" />
-          <span className="h-2 w-2 rounded-full bg-white/20" />
-          <span className="ml-2 truncate font-mono text-[0.55rem] text-white/45">
-            {mock}
+      {/* grid */}
+      <div
+        className="absolute inset-0 opacity-[0.13]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+        }}
+      />
+
+      {/* mock window */}
+      <div className="relative overflow-hidden border border-white/15 bg-black/35 shadow-2xl backdrop-blur-sm">
+        <div className="flex items-center gap-1.5 border-b border-white/12 px-3 py-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-white/35" />
+          <span className="h-1.5 w-1.5 rounded-full bg-white/22" />
+          <span className="h-1.5 w-1.5 rounded-full bg-white/15" />
+          <span className="ml-2 font-mono text-[0.52rem] tracking-[0.1em] text-white/40">
+            {mono}
           </span>
         </div>
+
         <div className="space-y-2 p-3.5">
-          <div className="h-2 w-2/3 rounded-full bg-white/25" />
-          <div className="h-2 w-1/2 rounded-full bg-white/15" />
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            <div className="h-9 rounded-md bg-white/10" />
-            <div className="h-9 rounded-md bg-white/15" />
-            <div className="h-9 rounded-md bg-white/10" />
+          <div className="h-1.5 w-2/5 rounded-full" style={{ backgroundColor: accent }} />
+          <div className="h-1.5 w-3/5 rounded-full bg-white/16" />
+          <div className="mt-3 grid grid-cols-3 gap-1.5">
+            {[0.28, 0.45, 0.2].map((h, i) => (
+              <div
+                key={i}
+                className="rounded-sm bg-white/10"
+                style={{ height: `${h * 60 + 18}px` }}
+              />
+            ))}
           </div>
-          <div className="mt-2 h-2 w-3/4 rounded-full bg-white/10" />
+          <div className="mt-2 h-1.5 w-1/2 rounded-full bg-white/10" />
         </div>
       </div>
 
-      {/* Floating mono tag */}
-      <div className="absolute bottom-4 left-6 rounded-full border border-white/20 bg-black/30 px-2.5 py-1 font-mono text-[0.55rem] uppercase tracking-[0.16em] text-white/70 backdrop-blur">
-        {project.category}
+      {/* caption strip */}
+      <div className="relative mt-4 flex items-center justify-between font-mono text-[0.52rem] uppercase tracking-[0.18em] text-white/40">
+        <span>{project.kicker}</span>
+        <span>{project.year}</span>
       </div>
 
-      {/* Hover sheen */}
-      <div className="absolute inset-0 translate-y-full bg-gradient-to-t from-white/12 to-transparent transition-transform duration-700 ease-out group-hover:translate-y-0" />
+      {/* sheen on hover */}
+      <div className="absolute inset-0 translate-y-full bg-gradient-to-t from-white/10 to-transparent transition-transform duration-700 ease-out group-hover:translate-y-0" />
     </div>
   );
 }

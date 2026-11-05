@@ -1,13 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#18b981"/>
-      <stop offset="55%" stop-color="#22c4dd"/>
-      <stop offset="100%" stop-color="#8b5cf6"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="16" fill="#080A10"/>
-  <rect x="1" y="1" width="62" height="62" rx="15.5" fill="none" stroke="url(#g)" stroke-opacity="0.45" stroke-width="1.5"/>
-  <path d="M20 46 L32 17 L44 46" fill="none" stroke="url(#g)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M25.5 37.5 H38.5" stroke="url(#g)" stroke-width="5" stroke-linecap="round"/>
+  <rect width="64" height="64" fill="#F4F0E7"/>
+  <rect x="1" y="1" width="62" height="62" fill="none" stroke="#241E16" stroke-opacity="0.35" stroke-width="1.5"/>
+  <text x="32" y="45" text-anchor="middle"
+        font-family="Fraunces, Georgia, serif" font-size="34" font-weight="600"
+        fill="#241E16" letter-spacing="-1.5">AJ</text>
+  <circle cx="50" cy="47" r="3" fill="#C2462B"/>
 </svg>

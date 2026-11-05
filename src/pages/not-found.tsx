@@ -1,49 +1,55 @@
-import { ArrowLeft, Compass } from "lucide-react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { EASE } from "@/components/motion/reveal";
+import { EDITORIAL_EASE, MaskedLines } from "@/components/motion/primitives";
 
 export default function NotFound() {
   return (
-    <div className="relative grid min-h-screen place-items-center overflow-hidden bg-background px-4">
-      <div aria-hidden="true" className="absolute inset-0 bg-grid mask-fade-radial opacity-60" />
-      <div
-        aria-hidden="true"
-        className="absolute left-1/2 top-1/2 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-[120px]"
-      />
-
+    <div className="grain relative grid min-h-screen place-items-center bg-[hsl(var(--paper))] px-5 text-[hsl(var(--ink))]">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: EASE }}
-        className="relative max-w-md text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, ease: EDITORIAL_EASE }}
+        className="relative w-full max-w-2xl"
       >
-        <div className="mx-auto mb-6 grid h-14 w-14 place-items-center rounded-2xl border border-border/80 bg-card/60 text-primary backdrop-blur">
-          <Compass className="h-6 w-6" />
+        <div className="flex items-center gap-3 border-b border-[hsl(var(--rule))] pb-3">
+          <span className="tick">404</span>
+          <span className="h-px w-8 bg-[hsl(var(--oxide))]" />
+          <span className="label">Page not found</span>
         </div>
 
-        <p className="font-mono text-[0.7rem] uppercase tracking-[0.28em] text-primary/80">
-          Error 404
-        </p>
-        <h1 className="mt-3 text-[clamp(2rem,6vw,3rem)] font-semibold leading-tight tracking-tight">
-          This page took a{" "}
-          <span className="text-serif-accent text-gradient">wrong turn</span>
-        </h1>
-        <p className="mt-4 text-[0.92rem] leading-relaxed text-muted-foreground">
-          The URL doesn't match anything here. Everything worth seeing lives on the
-          home page.
+        <MaskedLines
+          as="h1"
+          delay={0.15}
+          className="display-lg mt-8"
+          lines={[
+            <span key="1">This page</span>,
+            <span key="2">
+              isn't{" "}
+              <span className="italic-accent text-[hsl(var(--oxide))]">printed</span>.
+            </span>,
+          ]}
+        />
+
+        <p className="mt-6 max-w-md text-[0.92rem] leading-relaxed text-[hsl(var(--ink-soft))]">
+          The address you followed doesn't match anything in this portfolio.
+          Everything worth reading lives on the first page.
         </p>
 
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Button asChild variant="accent">
-            <a href="/">
-              <ArrowLeft className="h-4 w-4" />
-              Back to home
-            </a>
-          </Button>
-          <Button asChild variant="outline">
-            <a href="/#projects">See the work</a>
-          </Button>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <a
+            href="/"
+            className="inline-flex items-center gap-2 bg-[hsl(var(--ink))] px-5 py-3 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-[hsl(var(--paper))] transition-colors hover:bg-[hsl(var(--oxide))]"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Back to the cover
+          </a>
+          <a
+            href="/#projects"
+            className="inline-flex items-center gap-2 border border-[hsl(var(--ink))] px-5 py-3 font-mono text-[0.62rem] uppercase tracking-[0.18em] transition-colors hover:bg-[hsl(var(--ink))] hover:text-[hsl(var(--paper))]"
+          >
+            See the work
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </a>
         </div>
       </motion.div>
     </div>

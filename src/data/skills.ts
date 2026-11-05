@@ -1,67 +1,82 @@
 export interface SkillGroup {
+  id: string;
   title: string;
-  /** lucide icon name, mapped in the Skills component */
-  icon: "code" | "database" | "layout" | "tools" | "terminal" | "server";
-  blurb: string;
+  /** short editorial descriptor */
+  note: string;
   items: string[];
 }
 
+/** Directly from the resume's "Technical Skills" section. */
 export const skillGroups: SkillGroup[] = [
   {
+    id: "languages",
     title: "Languages",
-    icon: "code",
-    blurb: "Core languages I write and reason in daily.",
-    items: ["Java", "C", "C++", "Python", "SQL"],
+    note: "The core of the work",
+    items: [
+      "Java (Core, Collections)",
+      "JSP",
+      "Servlets",
+      "Hibernate ORM",
+      "C",
+      "C++",
+      "SQL",
+      "PL/SQL",
+    ],
   },
   {
+    id: "databases",
     title: "Databases",
-    icon: "database",
-    blurb: "Relational modelling, query tuning and schema design.",
-    items: ["MySQL", "PostgreSQL"],
+    note: "Modelling and querying",
+    items: ["MySQL", "PostgreSQL", "MongoDB"],
   },
   {
-    title: "Web",
-    icon: "layout",
-    blurb: "Server-rendered views and interactive front-ends.",
-    items: ["HTML5", "CSS3", "JavaScript", "JSP", "Servlets"],
+    id: "web",
+    title: "Web Technologies",
+    note: "Browser to backend",
+    items: ["HTML", "CSS", "JavaScript", "REST APIs", "MVC Architecture"],
   },
   {
-    title: "Frameworks & Tools",
-    icon: "tools",
-    blurb: "The kit I reach for across the delivery cycle.",
-    items: ["Hibernate", "Docker", "Git", "GitHub", "Firebase", "Postman", "Maven"],
+    id: "concepts",
+    title: "Core Concepts",
+    note: "The part that transfers",
+    items: [
+      "Data Structures",
+      "Algorithms",
+      "OOP",
+      "Multithreading",
+      "Debugging",
+      "Design Patterns",
+    ],
   },
   {
-    title: "Environments",
-    icon: "terminal",
-    blurb: "Where the code actually runs.",
-    items: ["IntelliJ IDEA", "Eclipse", "VS Code", "Windows", "Linux"],
+    id: "tools",
+    title: "Tools & Frameworks",
+    note: "Day-to-day kit",
+    items: [
+      "GitHub",
+      "Docker",
+      "Postman API",
+      "Firebase",
+      "IntelliJ IDEA",
+      "Eclipse",
+      "Visual Studio Code",
+    ],
   },
   {
-    title: "Backend",
-    icon: "server",
-    blurb: "Architecture and the service layer.",
-    items: ["REST APIs", "MVC", "JDBC", "Apache Tomcat"],
+    id: "systems",
+    title: "Operating Systems",
+    note: "Where it runs",
+    items: ["Windows", "Linux (Ubuntu)"],
   },
 ];
 
-export const coreConcepts = [
-  "Data Structures & Algorithms",
-  "Object-Oriented Programming",
-  "Multithreading",
-  "Debugging",
-  "Design Patterns",
-  "REST APIs",
-  "MVC Architecture",
-];
-
-export const softSkills = [
-  { name: "Teamwork", detail: "Pairing, review and shared ownership" },
-  { name: "Communication", detail: "Clear specs, honest status updates" },
-  { name: "Leadership", detail: "Owning a module end to end" },
-];
-
-/** Flattened, de-duplicated list used by the hero marquee. */
-export const allTechnologies = Array.from(
-  new Set(skillGroups.flatMap((g) => g.items)),
-);
+/** Flat, de-duplicated list for the marquee (compound labels split). */
+export const allSkills = Array.from(
+  new Set(
+    skillGroups.flatMap((g) =>
+      g.items.flatMap((item) =>
+        item.replace(/\s*\(.*?\)/g, "").split(",").map((s) => s.trim()),
+      ),
+    ),
+  ),
+).filter(Boolean);
