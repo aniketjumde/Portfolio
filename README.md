@@ -1,6 +1,6 @@
 # Aniket Jumde — Portfolio
 
-An editorial-print portfolio for **Aniket Jumde**, Java developer and problem solver.
+A dark-editorial portfolio for **Aniket Jumde**, Java developer and problem solver.
 Built with React 19, Vite 7, Tailwind CSS v4 and Framer Motion.
 
 **Live:** https://aniketjumdeportfolio.vercel.app/
@@ -9,20 +9,20 @@ Built with React 19, Vite 7, Tailwind CSS v4 and Framer Motion.
 
 ## The concept
 
-Most developer portfolios reach for the same visual language: dark navy, glassmorphism,
-neon gradients, a grid of identical project cards. This one deliberately goes the other way.
+Dark editorial meets creative technology. Instead of the default developer-portfolio
+language — navy gradients, glass cards, a grid of identical thumbnails — this treats the
+page like a printed poster that happens to be interactive.
 
-The design language is **printed matter** — a warm paper stock (`#F4F0E7`), ink-black type,
-hairline rules, registration marks, figure captions and a numbered section index. Two signal
-colours carry all the emphasis: a burnt **oxide** for accents and a deep **ultramarine** for
-secondary marks. A fine dot screen sits over everything at 5% to give the page the texture of
-offset printing rather than a screen.
+Deep charcoal stock (`#0B0B0A`), **electric lime** (`#D4FF38`) as the single signal colour,
+off-white type, and hairline rules at 1.44:1 so structure reads without shouting. A 72px
+grid and a 3.5% noise screen sit under the content to give it grain. Ambient blooms drift
+behind the hero and the closing section.
 
-Typography does the heavy lifting: **Fraunces** (a variable optical-size serif) for display,
-**Inter Tight** for body copy, and **JetBrains Mono** for the metadata, labels and numbering
-that frame each section the way a magazine sets its furniture.
+Type carries the identity: **Anton** at poster scale for display, **Bricolage Grotesque**
+for headings, **Inter Tight** for body copy, and **JetBrains Mono** for the metadata that
+frames every section.
 
-It reads as a designed document rather than a templated site.
+The result reads as a designed object, not a template.
 
 ---
 
@@ -30,15 +30,14 @@ It reads as a designed document rather than a templated site.
 
 | # | Section | What it does |
 |---|---|---|
-| — | Masthead | Fixed index with section numbers, active tracking, reading progress |
-| 01 | Introduction | Oversized name, discipline slab, portrait plate, metric ledger |
-| 02 | About | Sticky sidebar of current facts, objectives ledger, pull quote |
-| 03 | Expertise | Accordion skill index — six categories from the résumé |
-| 04 | Experience & Education | Timeline with a scroll-linked oxide rail |
-| 05 | Selected Projects | Full-width editorial rows with CSS-drawn project plates |
-| 06 | Achievements | Metric cards, grouped certification ledger, verify links |
-| 07 | Let's Connect | Copy-to-clipboard email, social index, working contact form |
-| — | Footer | Oversized sign-off, two index columns, colophon |
+| — | Floating nav | Monogram, condensed-on-scroll bar, sliding active indicator, scroll-progress hairline |
+| 01 | Hero | Poster headline, availability status, standfirst, magnetic CTAs, metric rail, socials |
+| 02 | Selected work | Interactive project index — hovering a row drives an expanded detail pane and a pointer-following preview |
+| 03 | About | Sticky fact ledger, narrative, focus list, education, technology ticker |
+| 04 | Skills | Six-category ledger from the résumé, hover-lit corners, achievement strip |
+| 05 | Experience & education | Four-stage rail with a scroll-linked lime fill, plus grouped certifications |
+| 06 | Contact | Copy-to-clipboard email, social index, validated form with focus-trapped confirmation dialog |
+| — | Footer | Oversized sign-off, index columns, contact block, colophon |
 
 ---
 
@@ -47,13 +46,15 @@ It reads as a designed document rather than a templated site.
 Every fact on the site is transcribed from `public/AniketCV.pdf`. Nothing is invented.
 
 - **Projects** — the two systems listed under *Professional Experience & Projects*
-  (Online Examination System, Student Management System). No demo or repository URL is
-  fabricated; the site says "Live demo on request" where no link exists.
+  (Online Examination System, Student Management System).
+- **Links** — only `Student-Managment-System` has a public repository, so only that
+  project shows a source link. The examination system is labelled "Demo on request".
+  No demo URL is fabricated.
 - **Certifications** — grouped by subject and issuer exactly as the résumé lists them,
   rather than inventing individual certificate titles.
 - **Metrics** — 1+ years Java, 150+ LeetCode, 5★ HackerRank in C/C++/Java/SQL, 8.22 CGPA.
 - **HackerRank profile** — the résumé references one but doesn't state the handle, so no
-  guessed URL is included. Add it to `src/data/credentials.ts` when you have it.
+  guessed URL is included.
 
 If a number changes on the résumé, change it in `src/data/` and it updates everywhere.
 
@@ -61,39 +62,41 @@ If a number changes on the résumé, change it in `src/data/` and it updates eve
 
 ```
 src/data/profile.ts      identity, summary, metrics, socials, navigation
-src/data/work.ts         the two projects
+src/data/work.ts         the two projects, contribution bullets, stack
 src/data/skills.ts       six skill groups
 src/data/timeline.ts     education and applied-practice timeline
-src/data/credentials.ts  certifications, achievements, verify links
+src/data/credentials.ts  certifications, achievements
 ```
 
 ---
 
-## Motion
+## Signature interactions
 
-Framer Motion throughout, tuned to feel typeset rather than animated:
+- **Preloader** — 0→100 counter with a BUILD / SHIP / REFINE word cycle, then a wipe up.
+  Runs once per session and is skipped entirely for reduced-motion users.
+- **Custom cursor** — an instant dot plus a lagging ring that grows over interactive
+  elements. Desktop/fine-pointer only; never applied to touch.
+- **Pointer-following project preview** — the work section floats a scaled project plate
+  that trails the cursor and tilts with horizontal position.
+- **Scroll-linked rail** — the experience timeline fills in step with scroll progress.
+- **Magnetic CTAs** — hero buttons lean toward the pointer by a few pixels.
+- **Masked line reveals** — every display heading rises out of an overflow mask.
 
-- **Masked line reveals** — display headings rise out of an overflow mask, line by line
-- **Draw-on rules** — hairline rules scale from zero as they enter view
-- **Scroll-linked timeline rail** — the oxide line fills in step with scroll position
-- **Parallax portrait** — the plate drifts slightly slower than the page
-- **Pointer-tracked tilt** — project plates rotate a few degrees toward the cursor
-- **Hover ink underlines** — links draw a rule from the left
-- **Full-screen mobile index** — clip-path wipe, staggered items
-
-All motion is `transform` / `clip-path` / `opacity` — nothing triggers layout. Every animated
-element is gated behind `prefers-reduced-motion` where it isn't purely decorative.
+All motion uses `transform` / `opacity` / `clip-path` only — nothing triggers layout.
+Every effect is gated behind `prefers-reduced-motion`.
 
 ---
 
 ## Accessibility
 
-- All body-text colour pairs verified at **WCAG AA (≥ 4.5:1)** in both themes
-- Skip link, single `<h1>`, landmark regions, ordered heading levels
-- Icon-only controls have `aria-label`; accordion triggers expose `aria-expanded`
+- Body text verified at **WCAG AA (≥ 4.5:1)**; the faintest token (`--fog`) sits at
+  **4.66:1** on the lightest dark surface
+- Skip link, a single `<h1>`, landmark regions, ordered heading levels
+- Keyboard focus is always visible — 2px lime ring, 3px offset
+- Icon-only controls carry `aria-label`; the mobile sheet exposes `aria-expanded`
 - Contact dialog traps focus, closes on Escape, restores focus on dismissal
 - Form fields are label-associated with `aria-invalid` / `aria-describedby` hints
-- Pinch-zoom is not blocked; focus-visible outlines use the oxide accent
+- Decorative layers are `aria-hidden`; pinch-zoom is not blocked
 
 ---
 
@@ -109,7 +112,7 @@ element is gated behind `prefers-reduced-motion` where it isn't purely decorativ
 | Routing | Wouter |
 | API | Vercel serverless function + Nodemailer |
 
-**12 runtime dependencies.** Production bundle: 41 kB CSS, ~412 kB JS (three chunks).
+Production bundle: 43 kB CSS, ~411 kB JS across three chunks (react / motion / app).
 
 ---
 
@@ -135,6 +138,16 @@ EMAIL_PASS=your-16-char-gmail-app-password
 Generate one at <https://myaccount.google.com/apppasswords> (2-Step Verification required).
 Without these the API returns a clear 500 rather than failing silently.
 
+### Assets
+
+`public/og.png` is the social card. `public/og.svg` is its source; this sandbox has no SVG
+rasteriser, so the PNG is generated directly with Pillow from the same design tokens:
+
+```bash
+pip install pillow numpy
+python3 tools/render-og.py
+```
+
 ### Scripts
 
 | Command | Does |
@@ -151,9 +164,6 @@ Without these the API returns a clear 500 rather than failing silently.
 Import the repo at <https://vercel.com/new> (Vite preset), add `EMAIL_USER` and `EMAIL_PASS`
 under environment variables, deploy. `vercel.json` handles the SPA rewrite, immutable asset
 caching and baseline security headers.
-
-`public/og.png` is rasterised from `public/og.svg` at 1200×630 — regenerate it if the SVG
-changes.
 
 ---
 

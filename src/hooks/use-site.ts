@@ -7,10 +7,10 @@ export function useMediaQuery(query: string): boolean {
 
   useEffect(() => {
     const mql = window.matchMedia(query);
-    const onChange = () => setMatches(mql.matches);
-    onChange();
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
+    const update = () => setMatches(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
   }, [query]);
 
   return matches;
@@ -20,11 +20,6 @@ export function usePrefersReducedMotion(): boolean {
   return useMediaQuery("(prefers-reduced-motion: reduce)");
 }
 
-export function useIsDesktop(): boolean {
-  return useMediaQuery("(min-width: 1024px)");
-}
-
-/** Scroll position, rAF-throttled. */
 export function useScrollY(): number {
   const [y, setY] = useState(0);
   useEffect(() => {
@@ -46,9 +41,10 @@ export function useScrollY(): number {
   return y;
 }
 
-/** The section currently occupying the middle of the viewport. */
+/** Section currently crossing the middle of the viewport. */
 export function useActiveSection(ids: readonly string[]): string {
   const [active, setActive] = useState(ids[0] ?? "");
+  const key = ids.join(",");
 
   useEffect(() => {
     const nodes = ids
@@ -63,24 +59,24 @@ export function useActiveSection(ids: readonly string[]): string {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
         if (visible[0]) setActive(visible[0].target.id);
       },
-      { rootMargin: "-42% 0px -42% 0px", threshold: [0, 0.2, 0.5, 1] },
+      { rootMargin: "-40% 0px -40% 0px", threshold: [0, 0.25, 0.6, 1] },
     );
 
     nodes.forEach((n) => observer.observe(n));
     return () => observer.disconnect();
-  }, [ids]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
 
   return active;
 }
 
-/** Locks body scroll (mobile menu / dialogs). */
 export function useScrollLock(locked: boolean) {
   useEffect(() => {
     if (!locked) return;
-    const original = document.body.style.overflow;
+    const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = original;
+      document.body.style.overflow = prev;
     };
   }, [locked]);
 }
