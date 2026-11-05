@@ -1,0 +1,24 @@
+From f08e2e2a1f2b00c034e78798d841716d1ec81d02 Mon Sep 17 00:00:00 2001
+From: Aniket Jumde <aniketjumde55@gmail.com>
+Date: Thu, 5 Nov 2026 14:11:03 +0000
+Subject: [PATCH] Add Aniket Jumde portfolio
+
+---
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/README.md b/README.md
+index a070749..b128af2 100644
+--- a/README.md
++++ b/README.md
+@@ -275,6 +275,7 @@ This repo can serve as inspiration for your portfolio!
+ - [Anh Duong](https://dhlananh-dev-portfolio.vercel.app) [‍Frontend Developer]
+ - [Anh Nguyen](https://anhnq15.github.io) [Software Engineer]
+ - [Aniket Joshi](https://aniketj.dev) [Software Architect]
++- [Aniket Jumde](https://aniketjumdeportfolio.vercel.app) [Java Developer & Software Engineer | Hibernate, SQL, REST APIs]
+ - [Aniket Kshirsagar](https://aniketksh.github.io) [SRE Engineer]
+ - [Aniket Kudale](https://aniket.co)
+ - [Aniket Patidar](https://aniketpatidar.com) [Software Engineer | Ruby on Rails]
+-- 
+2.39.5
+

@@ -1,42 +1,37 @@
+
+!.vscode/extensions.json
+# Build output (regenerate with `npm run build`)
 # Dependencies
-node_modules/
+# Editor directories and files
+# Environment variables
+# Logs
+# Production
+# Testing
+# TypeScript
+# Vercel
+*.njsproj
+*.ntvs*
+*.sln
+*.suo
+*.sw?
+*.tsbuildinfo
+.DS_Store
+.env
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.idea
 .pnp
 .pnp.js
-
-# Testing
-coverage/
-
-# Production
-dist/
+.vercel
+.vscode/*
 build/
-
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Logs
+coverage/
+dist/
+lerna-debug.log*
+node_modules/
 npm-debug.log*
+pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Vercel
-.vercel
-
-# TypeScript
-*.tsbuildinfo

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aniketjumdeportfolio.vercel.app/sitemap.xml
