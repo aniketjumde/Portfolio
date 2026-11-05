@@ -1,6 +1,6 @@
 {
   "name": "aniket-portfolio",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "type": "module",
   "license": "MIT",
   "scripts": {
@@ -38,6 +38,6 @@
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
   },
-  "description": "Portfolio of Aniket Jumde \u2014 Java Developer & Software Engineer",
+  "description": "Portfolio of Aniket Jumde — Java Developer & Software Engineer",
   "private": true
 }

@@ -1,40 +1,35 @@
 import { ThemeProvider } from "@/hooks/use-theme";
-import { Navbar } from "@/components/layout/navbar";
+import { Masthead } from "@/components/layout/masthead";
 import { Footer } from "@/components/layout/footer";
-import { Backdrop } from "@/components/layout/backdrop";
-import { Hero, TechMarquee } from "@/components/sections/hero";
+import { Hero } from "@/components/sections/hero";
 import { About } from "@/components/sections/about";
-import { Skills } from "@/components/sections/skills";
+import { Expertise } from "@/components/sections/expertise";
 import { Experience } from "@/components/sections/experience";
 import { Projects } from "@/components/sections/projects";
-import { Services } from "@/components/sections/services";
 import { Achievements } from "@/components/sections/achievements";
-import { Contact } from "@/components/sections/contact";
+import { Connect } from "@/components/sections/connect";
 
 export default function Home() {
   return (
     <ThemeProvider>
-      <div className="relative min-h-screen bg-background text-foreground antialiased">
+      <div className="grain relative min-h-screen bg-[hsl(var(--paper))] text-[hsl(var(--ink))]">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:border focus:border-[hsl(var(--ink))] focus:bg-[hsl(var(--paper))] focus:px-4 focus:py-2 focus:font-mono focus:text-xs"
         >
           Skip to content
         </a>
 
-        <Backdrop />
-        <Navbar />
+        <Masthead />
 
-        <main id="main">
+        <main id="main" className="relative z-[2]">
           <Hero />
-          <TechMarquee />
           <About />
-          <Skills />
+          <Expertise />
           <Experience />
           <Projects />
-          <Services />
           <Achievements />
-          <Contact />
+          <Connect />
         </main>
 
         <Footer />
