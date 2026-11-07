@@ -1,6 +1,7 @@
 import { ArrowUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { navigation, profile, socials } from "@/data/profile";
+import { useResume } from "@/hooks/use-resume";
 import { GithubIcon, GmailIcon, LeetcodeIcon, LinkedinIcon } from "@/components/ui/brand-icons";
 
 const iconMap = {
@@ -11,6 +12,7 @@ const iconMap = {
 } as const;
 
 export function Footer() {
+  const { open: openResume } = useResume();
   const year = new Date().getFullYear();
 
   return (
@@ -99,13 +101,22 @@ export function Footer() {
               {profile.phone}
             </a>
 
-            <a
-              href={profile.resumeUrl}
-              download
-              className="mt-4 inline-flex items-center gap-2 border border-[hsl(var(--edge))] px-3 py-1.5 font-mono text-[0.56rem] uppercase tracking-[0.16em] text-[hsl(var(--ash))] transition-colors hover:border-[hsl(var(--lime))] hover:text-[hsl(var(--lime))]"
-            >
-              Résumé ↓
-            </a>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={openResume}
+                className="inline-flex items-center gap-2 border border-[hsl(var(--edge))] px-3 py-1.5 font-mono text-[0.56rem] uppercase tracking-[0.16em] text-[hsl(var(--ash))] transition-colors hover:border-[hsl(var(--lime))] hover:text-[hsl(var(--lime))]"
+              >
+                View résumé
+              </button>
+              <a
+                href={profile.resumeUrl}
+                download
+                className="inline-flex items-center gap-2 border border-[hsl(var(--edge))] px-3 py-1.5 font-mono text-[0.56rem] uppercase tracking-[0.16em] text-[hsl(var(--ash))] transition-colors hover:border-[hsl(var(--lime))] hover:text-[hsl(var(--lime))]"
+              >
+                Download ↓
+              </a>
+            </div>
           </div>
         </div>
 

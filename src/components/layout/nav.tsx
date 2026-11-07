@@ -3,12 +3,14 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { navigation, profile } from "@/data/profile";
 import { useActiveSection, useScrollLock, useScrollY } from "@/hooks/use-site";
+import { useResume } from "@/hooks/use-resume";
 import { cn } from "@/lib/utils";
 import { EASE_OUT_EXPO } from "@/components/motion/easing";
 
 const ids = navigation.map((n) => n.id);
 
 export function Nav() {
+  const { open: openResume } = useResume();
   const [open, setOpen] = useState(false);
   const [condensed, setCondensed] = useState(false);
   const active = useActiveSection(ids);
@@ -77,7 +79,7 @@ export function Nav() {
             </a>
 
             {/* Desktop links with sliding indicator */}
-            <div className="hidden items-center gap-0.5 md:flex">
+            <div className="hidden items-center gap-0.5 lg:flex">
               {navigation.map((item) => {
                 const isActive = active === item.id;
                 return (
@@ -120,7 +122,7 @@ export function Nav() {
                 aria-expanded={open}
                 aria-controls="mobile-nav"
                 aria-label={open ? "Close menu" : "Open menu"}
-                className="grid h-9 w-9 place-items-center border border-[hsl(var(--edge))] text-[hsl(var(--chalk))] transition-colors hover:border-[hsl(var(--chalk))]/40 md:hidden"
+                className="grid h-9 w-9 place-items-center border border-[hsl(var(--edge))] text-[hsl(var(--chalk))] transition-colors hover:border-[hsl(var(--chalk))]/40 lg:hidden"
               >
                 {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
               </button>
@@ -138,7 +140,7 @@ export function Nav() {
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
-            className="fixed inset-0 z-40 flex flex-col bg-[hsl(var(--carbon))] pt-[4.5rem] md:hidden"
+            className="fixed inset-0 z-40 flex flex-col bg-[hsl(var(--carbon))] pt-[4.5rem] lg:hidden"
           >
             <div className="flex-1 overflow-y-auto px-5 pb-8">
               <p className="meta border-b border-[hsl(var(--edge))] pb-3">Index</p>
@@ -176,13 +178,16 @@ export function Nav() {
                 transition={{ delay: 0.4, duration: 0.5 }}
                 className="mt-7 space-y-3"
               >
-                <a
-                  href={profile.resumeUrl}
-                  download
-                  className="flex items-center justify-center gap-2 bg-[hsl(var(--lime))] px-4 py-3.5 font-mono text-[0.64rem] uppercase tracking-[0.18em] text-[hsl(var(--carbon))]"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    openResume();
+                  }}
+                  className="flex w-full items-center justify-center gap-2 bg-[hsl(var(--lime))] px-4 py-3.5 font-mono text-[0.64rem] uppercase tracking-[0.18em] text-[hsl(var(--carbon))]"
                 >
-                  Download résumé (PDF)
-                </a>
+                  View résumé (PDF)
+                </button>
                 <a
                   href={`mailto:${profile.email}`}
                   className="block break-all text-center font-mono text-[0.7rem] text-[hsl(var(--ash))] underline underline-offset-4"

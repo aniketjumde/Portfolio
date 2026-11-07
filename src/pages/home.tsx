@@ -10,12 +10,15 @@ import { About } from "@/components/sections/about";
 import { Skills } from "@/components/sections/skills";
 import { Experience } from "@/components/sections/experience";
 import { Contact } from "@/components/sections/contact";
+import { Credentials } from "@/components/sections/credentials";
+import { ResumeProvider } from "@/hooks/use-resume";
 
 export default function Home() {
   const [ready, setReady] = useState(false);
   const onDone = useCallback(() => setReady(true), []);
 
   return (
+    <ResumeProvider>
     <div className="noise relative min-h-screen bg-[hsl(var(--carbon))] text-[hsl(var(--chalk))]">
       <Preloader onDone={onDone} />
       <CustomCursor />
@@ -36,10 +39,12 @@ export default function Home() {
         <About />
         <Skills />
         <Experience />
+        <Credentials />
         <Contact />
       </main>
 
       <Footer />
     </div>
+    </ResumeProvider>
   );
 }

@@ -30,13 +30,14 @@ The result reads as a designed object, not a template.
 
 | # | Section | What it does |
 |---|---|---|
-| — | Floating nav | Monogram, condensed-on-scroll bar, sliding active indicator, scroll-progress hairline |
+| — | Floating nav | Monogram, condensed-on-scroll bar, sliding active indicator, scroll-progress hairline, résumé viewer |
 | 01 | Hero | Poster headline, availability status, standfirst, magnetic CTAs, metric rail, socials |
-| 02 | Selected work | Interactive project index — hovering a row drives an expanded detail pane and a pointer-following preview |
+| 02 | Selected work | Full editorial spreads, alternating sides — each project with two vector screens, contribution, stack and links |
 | 03 | About | Sticky fact ledger, narrative, focus list, education, technology ticker |
-| 04 | Skills | Six-category ledger from the résumé, hover-lit corners, achievement strip |
-| 05 | Experience & education | Four-stage rail with a scroll-linked lime fill, plus grouped certifications |
-| 06 | Contact | Copy-to-clipboard email, social index, validated form with focus-trapped confirmation dialog |
+| 04 | Skills | Rotating word-sphere over a six-category ledger; isolate a category by hover, tap or keyboard |
+| 05 | Experience & education | Four-stage rail with a scroll-linked lime fill |
+| 06 | Credentials | Achievement rail and the full certification ledger, grouped by issuer |
+| 07 | Contact | Copy-to-clipboard email, social index, validated form with focus-trapped confirmation dialog |
 | — | Footer | Oversized sign-off, index columns, contact block, colophon |
 
 ---
@@ -137,6 +138,14 @@ EMAIL_PASS=your-16-char-gmail-app-password
 
 Generate one at <https://myaccount.google.com/apppasswords> (2-Step Verification required).
 Without these the API returns a clear 500 rather than failing silently.
+
+### Résumé viewer
+
+Every "Résumé" control opens one shared dialog (`components/experience/resume-dialog.tsx`)
+that renders the PDF in a native `<iframe>` — no pdf.js, nothing to bundle. On phones,
+where in-frame PDFs are unreliable, it swaps to explicit open/download actions instead of
+showing an empty box. The provider is mounted once in `pages/home.tsx`, so three buttons
+share a single document load.
 
 ### Assets
 

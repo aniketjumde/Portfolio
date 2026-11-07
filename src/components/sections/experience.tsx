@@ -3,7 +3,6 @@ import { useRef } from "react";
 import { DrawLine, PosterLinesOnScroll, Rise } from "@/components/motion/text";
 import { EASE_OUT_EXPO } from "@/components/motion/easing";
 import { timeline } from "@/data/timeline";
-import { certificationGroups, certificationCount } from "@/data/credentials";
 import { cn } from "@/lib/utils";
 
 export function Experience() {
@@ -117,35 +116,6 @@ export function Experience() {
             </ol>
           </div>
 
-          {/* Certifications */}
-          <div className="mt-16">
-            <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[hsl(var(--edge))] pb-3">
-              <h3 className="poster text-[1.5rem] leading-none">CERTIFICATIONS</h3>
-              <span className="font-mono text-[0.58rem] uppercase tracking-[0.16em] text-[hsl(var(--fog))]">
-                {certificationCount} credentials
-              </span>
-            </div>
-
-            <div className="mt-6 grid gap-x-10 gap-y-0 sm:grid-cols-2">
-              {certificationGroups.map((group, gi) => (
-                <Rise key={group.group} delay={gi * 0.05} y={14}>
-                  <div className="border-b border-[hsl(var(--edge))] py-4">
-                    <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <p className="font-mono text-[0.58rem] uppercase tracking-[0.16em] text-[hsl(var(--lime))]">
-                        {group.group}
-                      </p>
-                      <p className="font-mono text-[0.55rem] text-[hsl(var(--fog))]">
-                        {group.issuer}
-                      </p>
-                    </div>
-                    <p className="mt-2 text-[0.85rem] leading-relaxed text-[hsl(var(--ash))]">
-                      {group.items.join(" · ")}
-                    </p>
-                  </div>
-                </Rise>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </section>

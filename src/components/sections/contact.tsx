@@ -82,7 +82,7 @@ export function Contact() {
         <div className="py-16 lg:py-24">
           <Rise>
             <p className="meta mb-4">
-              <span className="text-[hsl(var(--lime))]">05</span> — Contact
+              <span className="text-[hsl(var(--lime))]">06</span> — Contact
             </p>
           </Rise>
 
