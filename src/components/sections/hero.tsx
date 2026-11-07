@@ -5,6 +5,7 @@ import { metrics, profile, socials } from "@/data/profile";
 import { EASE_OUT_EXPO } from "@/components/motion/easing";
 import { PosterLines } from "@/components/motion/text";
 import { usePrefersReducedMotion } from "@/hooks/use-site";
+import { useResume } from "@/hooks/use-resume";
 import { Starfield } from "@/components/experience/starfield";
 import { Typewriter } from "@/components/motion/typewriter";
 import { GithubIcon, GmailIcon, LeetcodeIcon, LinkedinIcon } from "@/components/ui/brand-icons";
@@ -17,6 +18,7 @@ const iconMap = {
 } as const;
 
 export function Hero({ ready }: { ready: boolean }) {
+  const { open: openResume } = useResume();
   const ref = useRef<HTMLElement>(null);
   const reduced = usePrefersReducedMotion();
   const { scrollYProgress } = useScroll({
@@ -132,14 +134,14 @@ export function Hero({ ready }: { ready: boolean }) {
                 </MagneticButton>
 
                 <MagneticButton>
-                  <a
-                    href={profile.resumeUrl}
-                    download
+                  <button
+                    type="button"
+                    onClick={openResume}
                     className="group inline-flex items-center gap-2.5 border border-[hsl(var(--edge))] px-6 py-3.5 font-mono text-[0.64rem] uppercase tracking-[0.18em] transition-colors duration-300 hover:border-[hsl(var(--chalk))]/45 hover:bg-[hsl(var(--chalk))]/[0.04]"
                   >
                     <Download className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5" />
                     Résumé
-                  </a>
+                  </button>
                 </MagneticButton>
               </motion.div>
             </div>

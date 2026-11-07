@@ -49,7 +49,8 @@ export const navigation = [
   { id: "about", name: "About", index: "02" },
   { id: "skills", name: "Skills", index: "03" },
   { id: "experience", name: "Experience", index: "04" },
-  { id: "contact", name: "Contact", index: "05" },
+  { id: "credentials", name: "Credentials", index: "05" },
+  { id: "contact", name: "Contact", index: "06" },
 ] as const;
 
 /** Headline metrics — all traceable to the résumé. */

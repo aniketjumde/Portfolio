@@ -66,6 +66,8 @@ export function Skills() {
                       onMouseLeave={() => setFocus(null)}
                       onFocus={() => setFocus(g.id)}
                       onBlur={() => setFocus(null)}
+                      onClick={() => setFocus((cur) => (cur === g.id ? null : g.id))}
+                      aria-pressed={focus === g.id}
                       className="flex w-full items-baseline gap-3 py-2.5 text-left"
                     >
                       <span className="font-mono text-[0.55rem] text-[hsl(var(--fog))]">
@@ -89,7 +91,7 @@ export function Skills() {
                 ))}
               </ul>
               <p className="mt-3 font-mono text-[0.55rem] uppercase leading-relaxed tracking-[0.14em] text-[hsl(var(--fog))]">
-                Hover a category to isolate it below
+                Hover or tap a category to isolate it below
               </p>
             </div>
           </div>
