@@ -2,28 +2,22 @@ export interface Project {
   slug: string;
   index: string;
   title: string;
-  /** Two-line poster title used in the index */
-  shortTitle: string;
+  /** short category shown above the title, like the reference's card eyebrow */
   category: string;
-  year: string;
-  role: string;
-  /** One sentence for the index row */
+  /** date stamp shown on the card, e.g. "MAY-2K25" */
+  stamp: string;
   tagline: string;
-  /** Full description for the detail view */
   description: string;
-  /** What I actually did — mirrors the résumé bullets */
   contribution: string[];
   tech: string[];
   demoUrl?: string;
-  /** Shown next to the demo link when the host sleeps idle instances. */
   demoNote?: string;
   codeUrl?: string;
   /** Which hand-built screen illustration to render */
   mock: "records" | "form" | "dashboard" | "result";
-  /** A second screen, shown as an overlapping card for depth */
   mockSecondary?: "records" | "form" | "dashboard" | "result";
-  /** Palette + label for the CSS-drawn visual */
-  visual: {
+  /** Cover artwork tokens — rendered as CSS, no image payload */
+  art: {
     from: string;
     to: string;
     accent: string;
@@ -32,23 +26,23 @@ export interface Project {
 }
 
 /**
- * Both projects are taken verbatim from the résumé's
+ * Both projects come verbatim from the résumé's
  * "Professional Experience & Projects" section.
  *
- * Only repository URLs that verifiably exist on the public GitHub account are
- * included. No demo URLs are fabricated — the résumé lists none.
+ * Links are only included where a public URL verifiably exists on the
+ * account: the Student Management System has both a repository and a live
+ * deployment documented in its own README. No demo URL is invented for the
+ * examination system.
  */
 export const projects: Project[] = [
   {
     slug: "online-examination-system",
     index: "01",
     title: "Online Examination System",
-    shortTitle: "EXAM\nSYSTEM",
-    category: "Multi-role web platform",
-    year: "2025",
-    role: "Full-stack · Java",
+    category: "Full-stack · Java",
+    stamp: "2K25",
     tagline:
-      "A web-based examination platform where admins, teachers and students each get a distinct, role-appropriate experience.",
+      "A multi-role examination platform where admins, teachers and students each get a distinct, role-appropriate experience.",
     description:
       "An examination system built around three distinct roles. Administrators and teachers manage the question bank, students sit exams, and the platform evaluates responses and generates results — all over a PostgreSQL schema accessed through JDBC.",
     contribution: [
@@ -59,10 +53,10 @@ export const projects: Project[] = [
     tech: ["Java", "JDBC", "Servlet", "JSP", "HTML", "CSS", "JavaScript", "PostgreSQL"],
     mock: "dashboard",
     mockSecondary: "result",
-    visual: {
-      from: "#1A1F14",
-      to: "#0B0B0A",
-      accent: "#D4FF38",
+    art: {
+      from: "#1b1030",
+      to: "#0b0b0b",
+      accent: "#a855f7",
       label: "exam.sys",
     },
   },
@@ -70,10 +64,8 @@ export const projects: Project[] = [
     slug: "student-management-system",
     index: "02",
     title: "Student Management System",
-    shortTitle: "STUDENT\nRECORDS",
     category: "Records & CRUD",
-    year: "2025",
-    role: "Full-stack · Java",
+    stamp: "2K25",
     tagline:
       "A responsive records platform with complete CRUD, built on a relational schema designed for consistency and security.",
     description:
@@ -89,10 +81,10 @@ export const projects: Project[] = [
     demoNote: "Free Render instance — first load may take ~30s to wake.",
     mock: "records",
     mockSecondary: "form",
-    visual: {
-      from: "#14181F",
-      to: "#0B0B0A",
-      accent: "#8AB4FF",
+    art: {
+      from: "#0f1b2d",
+      to: "#0b0b0b",
+      accent: "#60a5fa",
       label: "records.db",
     },
   },

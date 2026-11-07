@@ -160,7 +160,7 @@ export function ExamDashboardMock({ className }: { className?: string }) {
       {/* sidebar */}
       <div className="w-[22%] shrink-0 border-r border-white/10 bg-[#14181D] p-2">
         <div className="mb-3 flex items-center gap-1">
-          <div className="h-2 w-2 rounded-[1px] bg-[#D4FF38]" />
+          <div className="h-2 w-2 rounded-[1px] bg-[#a855f7]" />
           <span className="text-[0.32rem] font-semibold text-white/90">Exam Admin</span>
         </div>
         {["Dashboard", "Questions", "Students", "Exams", "Results"].map((item, i) => (
@@ -168,7 +168,7 @@ export function ExamDashboardMock({ className }: { className?: string }) {
             key={item}
             className={cn(
               "mb-0.5 rounded-[2px] px-1.5 py-1 text-[0.28rem]",
-              i === 1 ? "bg-[#D4FF38]/15 text-[#D4FF38]" : "text-white/45",
+              i === 1 ? "bg-[#a855f7]/15 text-[#a855f7]" : "text-white/45",
             )}
           >
             {item}
@@ -183,7 +183,7 @@ export function ExamDashboardMock({ className }: { className?: string }) {
             <p className="text-[0.46rem] font-semibold text-white">Question Bank</p>
             <p className="text-[0.26rem] text-white/40">Manage, tag and publish exam questions</p>
           </div>
-          <span className="rounded-[2px] bg-[#D4FF38] px-1.5 py-[2px] text-[0.24rem] font-semibold text-[#0B0B0A]">
+          <span className="rounded-[2px] bg-[#a855f7] px-1.5 py-[2px] text-[0.24rem] font-semibold text-[#0b0b0b]">
             + New
           </span>
         </div>
@@ -191,7 +191,7 @@ export function ExamDashboardMock({ className }: { className?: string }) {
         {/* role chips */}
         <div className="mb-2 grid grid-cols-3 gap-1">
           {[
-            { label: "Admin", value: "Full", tone: "text-[#D4FF38]" },
+            { label: "Admin", value: "Full", tone: "text-[#a855f7]" },
             { label: "Teacher", value: "Author", tone: "text-sky-300" },
             { label: "Student", value: "Attempt", tone: "text-emerald-300" },
           ].map((r) => (
@@ -254,14 +254,14 @@ export function ExamResultMock({ className }: { className?: string }) {
           <p className="text-[0.44rem] font-semibold text-white">Result Sheet</p>
           <p className="text-[0.24rem] text-white/40">Online Examination System</p>
         </div>
-        <span className="rounded-[2px] border border-[#D4FF38]/40 px-1.5 py-[1px] text-[0.22rem] text-[#D4FF38]">
+        <span className="rounded-[2px] border border-[#a855f7]/40 px-1.5 py-[1px] text-[0.22rem] text-[#a855f7]">
           PUBLISHED
         </span>
       </div>
 
       {/* total */}
       <div className="mb-2.5 flex items-end gap-2">
-        <p className="font-mono text-[1.1rem] font-semibold leading-none text-[#D4FF38]">65</p>
+        <p className="font-mono text-[1.1rem] font-semibold leading-none text-[#a855f7]">65</p>
         <p className="mb-0.5 text-[0.26rem] text-white/40">/ 80 marks</p>
         <span className="mb-0.5 ml-auto text-[0.26rem] font-medium text-emerald-300">PASS · 81.25%</span>
       </div>
@@ -278,7 +278,7 @@ export function ExamResultMock({ className }: { className?: string }) {
             </div>
             <div className="h-[3px] w-full overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full rounded-full bg-[#D4FF38]"
+                className="h-full rounded-full bg-[#a855f7]"
                 style={{ width: `${(s.got / s.of) * 100}%` }}
               />
             </div>

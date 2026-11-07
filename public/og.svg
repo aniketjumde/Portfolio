@@ -1,76 +1,56 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-  <!-- Aniket Jumde — social card. Dark editorial + electric lime. -->
+  <!-- Source of truth for public/og.png. Rendered by tools/render-og.py. -->
   <defs>
-    <linearGradient id="field" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#12120E"/>
-      <stop offset="55%" stop-color="#0B0B0A"/>
-      <stop offset="100%" stop-color="#14180B"/>
+    <linearGradient id="field" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b0b0b"/>
+      <stop offset="100%" stop-color="#121212"/>
     </linearGradient>
-    <radialGradient id="bloomA" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#D4FF38" stop-opacity="0.20"/>
-      <stop offset="100%" stop-color="#D4FF38" stop-opacity="0"/>
+    <radialGradient id="bloom" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="bloomB" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#5B8CFF" stop-opacity="0.13"/>
-      <stop offset="100%" stop-color="#5B8CFF" stop-opacity="0"/>
-    </radialGradient>
-    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-      <path d="M60 0H0V60" fill="none" stroke="#FFFFFF" stroke-opacity="0.045" stroke-width="1"/>
+    <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse">
+      <path d="M56 0H0V56" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
     </pattern>
-    <clipPath id="frame">
-      <rect width="1200" height="630"/>
-    </clipPath>
   </defs>
 
-  <g clip-path="url(#frame)">
-    <rect width="1200" height="630" fill="url(#field)"/>
-    <rect width="1200" height="630" fill="url(#grid)"/>
-    <circle cx="1055" cy="110" r="330" fill="url(#bloomA)"/>
-    <circle cx="905" cy="250" r="380" fill="url(#bloomB)"/>
+  <rect width="1200" height="630" fill="url(#field)"/>
+  <ellipse cx="1060" cy="80" rx="380" ry="380" fill="url(#bloom)"/>
+  <ellipse cx="100" cy="600" rx="280" ry="280" fill="url(#bloom)" opacity="0.5"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
 
-    <!-- top meta rule -->
-    <line x1="64" y1="92" x2="1136" y2="92" stroke="#FFFFFF" stroke-opacity="0.14"/>
-    <g font-family="JetBrains Mono" font-size="14" fill="#9C9C8C" letter-spacing="3.1">
-      <text x="64" y="74">PORTFOLIO — VOL. 03</text>
-      <text x="1136" y="74" text-anchor="end">JAVA DEVELOPER / PROBLEM SOLVER</text>
-    </g>
+  <rect x="64" y="58" width="28" height="28" rx="8" fill="#a855f7"/>
+  <text x="78" y="72" text-anchor="middle" dominant-baseline="middle"
+        font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#fff">AJ</text>
+  <text x="104" y="72" dominant-baseline="middle"
+        font-family="Inter, sans-serif" font-size="17" font-weight="600" fill="#fff">Aniket Jumde</text>
 
-    <!-- availability pill -->
-    <g transform="translate(64 118)">
-      <circle cx="4" cy="0" r="4" fill="#D4FF38"/>
-      <text x="18" y="5" font-family="JetBrains Mono" font-size="12.5" fill="#D4FF38" letter-spacing="2.4">OPEN TO INTERNSHIPS &amp; FULL-TIME ROLES</text>
-    </g>
+  <circle cx="1030" cy="71" r="4" fill="#34d399"/>
+  <text x="1044" y="72" dominant-baseline="middle"
+        font-family="JetBrains Mono, monospace" font-size="12" fill="#34d399" letter-spacing="1.8">OPEN TO WORK</text>
 
-    <!-- poster name, stacked -->
-    <g font-family="Anton" fill="#F2F2E9" letter-spacing="1">
-      <text x="58" y="332" font-size="178">ANIKET</text>
-      <text x="58" y="490" font-size="178">JUMDE<tspan fill="#D4FF38">.</tspan></text>
-    </g>
+  <text x="64" y="216" font-family="Inter, sans-serif" font-size="68" font-weight="600" fill="#fff">Software Developer</text>
+  <text x="64" y="296" font-family="Inter, sans-serif" font-size="68" font-weight="600" fill="#c084fc">&amp; Java Engineer</text>
 
-    <!-- descriptor -->
-    <text x="64" y="548" font-family="Inter Tight" font-size="25" fill="#B4B4A4">Multi-role web applications with relational backends —</text>
-    <text x="64" y="584" font-family="Inter Tight" font-size="25" fill="#B4B4A4">schema, servlets, and interface built to agree.</text>
+  <text x="64" y="366" font-family="Inter, sans-serif" font-size="23" fill="#b7b7be">Full-stack Java systems with relational backends —</text>
+  <text x="64" y="400" font-family="Inter, sans-serif" font-size="23" fill="#b7b7be">schema, servlets and interface built to agree.</text>
 
-    <!-- metrics rail, right -->
-    <g transform="translate(892 176)">
-      <line x1="0" y1="0" x2="244" y2="0" stroke="#D4FF38" stroke-width="2"/>
-      <g font-family="Anton" fill="#F2F2E9">
-        <text x="0" y="52" font-size="42">1+</text>
-        <text x="0" y="118" font-size="42">150+</text>
-        <text x="0" y="184" font-size="42">5★</text>
-        <text x="0" y="250" font-size="42">8.22</text>
-      </g>
-      <g font-family="JetBrains Mono" font-size="10.5" fill="#8A8A7A" letter-spacing="1.7">
-        <text x="132" y="50">YEARS JAVA</text>
-        <text x="132" y="116">LEETCODE</text>
-        <text x="132" y="182">HACKERRANK</text>
-        <text x="132" y="248">CGPA B.TECH</text>
-      </g>
-      <line x1="0" y1="292" x2="244" y2="292" stroke="#FFFFFF" stroke-opacity="0.12"/>
-    </g>
+  <line x1="64" y1="470" x2="1136" y2="470" stroke="#ffffff" stroke-opacity="0.12"/>
+  <line x1="64" y1="594" x2="1136" y2="594" stroke="#a855f7" stroke-opacity="0.35"/>
 
-    <!-- footer -->
-    <line x1="64" y1="612" x2="1136" y2="612" stroke="#D4FF38" stroke-opacity="0.35"/>
-    <text x="1136" y="600" text-anchor="end" font-family="JetBrains Mono" font-size="13" fill="#8A8A7A" letter-spacing="1.4">aniketjumdeportfolio.vercel.app</text>
+  <g font-family="Inter, sans-serif" font-size="30" font-weight="600" fill="#fff">
+    <text x="64" y="536">1+</text>
+    <text x="332" y="536">150+</text>
+    <text x="600" y="536">5★</text>
+    <text x="868" y="536">8.22</text>
   </g>
+  <g font-family="JetBrains Mono, monospace" font-size="10" fill="#8c8c95" letter-spacing="1.6">
+    <text x="64" y="560">YEARS</text>
+    <text x="332" y="560">LEETCODE</text>
+    <text x="600" y="560">HACKERRANK</text>
+    <text x="868" y="560">CGPA</text>
+  </g>
+
+  <text x="1136" y="620" text-anchor="end"
+        font-family="JetBrains Mono, monospace" font-size="12" fill="#8c8c95">aniketjumdeportfolio.vercel.app</text>
 </svg>
