@@ -7,6 +7,7 @@ export const profile = {
   name: "Aniket Jumde",
   first: "Aniket",
   last: "Jumde",
+  shortName: "Aniket",
   monogram: "AJ",
   role: "Java Developer",
   discipline: "Problem Solver",
@@ -45,11 +46,11 @@ export const socials = [
 export type SocialLabel = (typeof socials)[number]["label"];
 
 export const navigation = [
-  { id: "work", name: "Work", index: "01" },
-  { id: "about", name: "About", index: "02" },
+  { id: "about", name: "About", index: "01" },
+  { id: "projects", name: "Projects", index: "02" },
   { id: "skills", name: "Skills", index: "03" },
   { id: "experience", name: "Experience", index: "04" },
-  { id: "credentials", name: "Credentials", index: "05" },
+  { id: "credentials", name: "Certifications", index: "05" },
   { id: "contact", name: "Contact", index: "06" },
 ] as const;
 

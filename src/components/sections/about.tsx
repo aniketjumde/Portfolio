@@ -1,157 +1,108 @@
 import { motion } from "framer-motion";
-import { DrawLine, PosterLinesOnScroll, Rise } from "@/components/motion/text";
+import { Code2, GraduationCap, Target, Terminal } from "lucide-react";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { EASE_OUT_EXPO } from "@/components/motion/easing";
 import { profile } from "@/data/profile";
-import { education, timeline } from "@/data/timeline";
-import { skillGroups } from "@/data/skills";
+import { education } from "@/data/timeline";
+import { allSkills } from "@/data/skills";
 
-const focus = [
+const pillars = [
   {
-    k: "The foundation",
-    v: "Mathematics and logic first. Data structures, algorithms and design patterns sit underneath everything else I write.",
+    icon: Code2,
+    title: "What I build",
+    body: "Full-stack Java systems — a PostgreSQL schema underneath, Servlets and JSP above it, and an interface that stays honest about what the data allows.",
   },
   {
-    k: "The work",
-    v: "Full-stack Java: a PostgreSQL schema, a servlet layer, and an interface on top that stays honest about what the data allows.",
+    icon: Terminal,
+    title: "How I work",
+    body: "Settle the data model first: the tables, the relationships, the constraints that stop bad rows existing at all. Everything above that layer gets simpler once it's right.",
   },
   {
-    k: "The goal",
-    v: "Internship or full-time work where I can contribute to real systems and learn from engineers who have shipped more than I have.",
+    icon: Target,
+    title: "Where I'm headed",
+    body: "An internship or full-time role on a real codebase, contributing to production systems and learning from engineers who have shipped more than I have.",
+  },
+  {
+    icon: GraduationCap,
+    title: "What I'm studying",
+    body: `${education.degree} at ${education.school}, ${education.period}. Currently holding a ${education.cgpa} CGPA across the degree.`,
   },
 ];
 
 export function About() {
-  const techCount = skillGroups.reduce((n, g) => n + g.items.length, 0);
-
   return (
-    <section id="about" className="relative">
-      <div className="mx-auto w-full max-w-[104rem] px-5 sm:px-8">
-        <DrawLine />
+    <section id="about" className="section relative">
+      <div className="shell relative z-10">
+        <SectionHeading
+          eyebrow="01 — About me"
+          title="Behind"
+          accent="the code"
+          lede="A short version of who I am, what I actually work with, and what I'm looking for next."
+        />
 
-        <div className="grid gap-10 py-16 lg:grid-cols-[0.42fr_0.58fr] lg:gap-20 lg:py-24">
-          {/* Left: sticky facts */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
-            <Rise>
-              <p className="meta mb-4">
-                <span className="text-[hsl(var(--lime))]">02</span> — About
-              </p>
-            </Rise>
-            <PosterLinesOnScroll
-              as="h2"
-              className="poster-lg"
-              lines={[
-                <span key="1">LOGIC</span>,
-                <span key="2">FIRST,</span>,
-                <span key="3" className="text-[hsl(var(--lime))]">
-                  THEN CODE.
-                </span>,
-              ]}
-            />
+        <div className="mx-auto mt-12 max-w-3xl">
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
+            className="text-center text-[1.02rem] leading-[1.8] text-[hsl(var(--ash))]"
+          >
+            {profile.summary}
+          </motion.p>
 
-            <div className="mt-8 space-y-px border border-[hsl(var(--edge))] bg-[hsl(var(--edge))]">
-              {[
-                { l: "Studying", v: education.degree },
-                { l: "Institution", v: education.school },
-                { l: "Period", v: `${education.period} · ${education.cgpa} CGPA` },
-                { l: "Based in", v: profile.location },
-                { l: "Status", v: profile.availability },
-              ].map((row) => (
-                <div key={row.l} className="bg-[hsl(var(--carbon))] px-4 py-3">
-                  <p className="font-mono text-[0.55rem] uppercase tracking-[0.16em] text-[hsl(var(--fog))]">
-                    {row.l}
-                  </p>
-                  <p className="mt-1 text-[0.84rem] leading-snug text-[hsl(var(--chalk))]">
-                    {row.v}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay: 0.08 }}
+            className="mt-5 text-center text-[1.02rem] leading-[1.8] text-[hsl(var(--ash))]"
+          >
+            I care more about whether the schema holds up under a bad input than about how
+            the landing page animates. That preference is why most of what I&apos;ve built
+            lives in the backend: role-based access, question banks, record constraints,
+            and the small decisions that keep data trustworthy.
+          </motion.p>
+        </div>
 
-          {/* Right: narrative */}
-          <div>
-            <Rise delay={0.05}>
-              <p className="font-grotesk text-[1.25rem] leading-[1.5] tracking-[-0.015em] text-[hsl(var(--chalk))] sm:text-[1.5rem]">
-                {profile.summary}
-              </p>
-            </Rise>
+        {/* Pillars */}
+        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {pillars.map((p, i) => (
+            <motion.div
+              key={p.title}
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: EASE_OUT_EXPO, delay: i * 0.07 }}
+              className="card card-lit p-5 transition-transform duration-300 hover:-translate-y-1"
+            >
+              <span className="grid h-10 w-10 place-items-center rounded-lg bg-[hsl(var(--violet))]/12 text-[hsl(var(--violet))]">
+                <p.icon className="h-[1.15rem] w-[1.15rem]" />
+              </span>
+              <h3 className="mt-4 text-[0.98rem] font-semibold text-white">{p.title}</h3>
+              <p className="mt-2 text-[0.875rem] leading-[1.7] text-[hsl(var(--ash))]">{p.body}</p>
+            </motion.div>
+          ))}
+        </div>
 
-            <Rise delay={0.1}>
-              <p className="mt-6 max-w-prose text-[0.95rem] leading-[1.75] text-[hsl(var(--ash))]">
-                That foundation in logic is what I lean on most. Before writing a feature I
-                want the data model settled — the tables, the relationships, the constraints
-                that stop bad rows existing in the first place. Everything above that layer
-                gets simpler once it's right.
-              </p>
-            </Rise>
-
-            {/* Focus ledger */}
-            <div className="mt-10 border-t border-[hsl(var(--edge))]">
-              {focus.map((f, i) => (
-                <Rise key={f.k} delay={i * 0.05} y={14}>
-                  <div className="grid gap-1.5 border-b border-[hsl(var(--edge))] py-5 sm:grid-cols-[10rem_1fr] sm:gap-6">
-                    <p className="font-mono text-[0.58rem] uppercase tracking-[0.18em] text-[hsl(var(--lime))]">
-                      {f.k}
-                    </p>
-                    <p className="text-[0.9rem] leading-relaxed text-[hsl(var(--ash))]">{f.v}</p>
-                  </div>
-                </Rise>
-              ))}
-            </div>
-
-            {/* Education condensation */}
-            <Rise delay={0.12} className="mt-10">
-              <p className="meta mb-3">Education</p>
-              <div className="space-y-2.5">
-                {timeline
-                  .filter((t) => t.kind === "Education")
-                  .map((t) => (
-                    <motion.div
-                      key={t.title}
-                      whileHover={{ x: 3 }}
-                      transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-                      className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-[hsl(var(--edge))] pb-2.5"
-                    >
-                      <div>
-                        <p className="text-[0.88rem] font-medium text-[hsl(var(--chalk))]">
-                          {t.title}
-                        </p>
-                        <p className="text-[0.78rem] text-[hsl(var(--fog))]">{t.org}</p>
-                      </div>
-                      <span className="font-mono text-[0.6rem] tracking-[0.08em] text-[hsl(var(--ash))]">
-                        {t.period} {t.metric ? `· ${t.metric}` : ""}
-                      </span>
-                    </motion.div>
-                  ))}
+        {/* Ticker of everything in the stack */}
+        <div className="mt-12 overflow-hidden border-y border-[hsl(0_0%_100%/0.08)] py-3">
+          <div className="flex w-max gap-8 motion-safe:animate-[marquee_38s_linear_infinite]">
+            {[0, 1].map((dup) => (
+              <div key={dup} className="flex shrink-0 items-center gap-8">
+                {allSkills.map((s) => (
+                  <span
+                    key={`${dup}-${s}`}
+                    className="flex shrink-0 items-center gap-8 text-[0.8rem] font-medium text-[hsl(var(--fog))]"
+                  >
+                    {s}
+                    <span aria-hidden="true" className="text-[hsl(var(--violet))]/70">
+                      /
+                    </span>
+                  </span>
+                ))}
               </div>
-            </Rise>
-
-            {/* Ticker of technologies */}
-            <Rise delay={0.15} className="mt-10">
-              <div className="overflow-hidden border-y border-[hsl(var(--edge))] py-2.5">
-                <div className="ticker-track flex w-max gap-6">
-                  {[0, 1].map((dup) => (
-                    <div key={dup} className="flex shrink-0 items-center gap-6">
-                      {skillGroups
-                        .flatMap((g) => g.items)
-                        .slice(0, 14)
-                        .map((item) => (
-                          <span
-                            key={`${dup}-${item}`}
-                            className="flex shrink-0 items-center gap-6 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-[hsl(var(--fog))]"
-                          >
-                            {item}
-                            <span className="text-[hsl(var(--lime))]">/</span>
-                          </span>
-                        ))}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <p className="mt-2.5 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-[hsl(var(--fog))]">
-                {techCount} technologies across {skillGroups.length} categories
-              </p>
-            </Rise>
+            ))}
           </div>
         </div>
       </div>

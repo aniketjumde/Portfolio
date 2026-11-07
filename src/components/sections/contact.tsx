@@ -1,37 +1,33 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, Check, Copy, Loader2, Send, X } from "lucide-react";
+import { AlertCircle, Check, Copy, Loader2, Mail, MapPin, Phone, Send, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { DrawLine, PosterLinesOnScroll, Rise } from "@/components/motion/text";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { EASE_OUT_EXPO } from "@/components/motion/easing";
-import { profile, socials } from "@/data/profile";
-import { GithubIcon, GmailIcon, LeetcodeIcon, LinkedinIcon } from "@/components/ui/brand-icons";
+import { profile } from "@/data/profile";
+import { useScrollLock } from "@/hooks/use-site";
 import { cn } from "@/lib/utils";
-
-const iconMap = {
-  GitHub: GithubIcon,
-  LinkedIn: LinkedinIcon,
-  LeetCode: LeetcodeIcon,
-  Email: GmailIcon,
-} as const;
 
 type Status = "idle" | "sending" | "sent" | "error";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export function Contact() {
-  const [copied, setCopied] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [copied, setCopied] = useState(false);
 
-  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
-  const ready =
+  const emailValid = EMAIL_RE.test(form.email);
+  const canSend =
     form.name.trim().length >= 2 &&
-    validEmail &&
+    emailValid &&
     form.message.trim().length >= 10 &&
     status !== "sending";
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!ready) return;
+    if (!canSend) return;
+
     setStatus("sending");
     setError("");
 
@@ -55,7 +51,11 @@ export function Contact() {
       setForm({ name: "", email: "", message: "" });
     } catch (err) {
       setStatus("error");
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Email me directly instead.",
+      );
     }
   }
 
@@ -65,211 +65,215 @@ export function Contact() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      /* clipboard unavailable */
+      /* clipboard blocked — the mailto link beside it still works */
     }
   }
 
   return (
-    <section id="contact" className="relative overflow-hidden">
-      {/* ambient */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="ambient-a absolute bottom-[-20%] left-1/2 h-[30rem] w-[45rem] -translate-x-1/2 rounded-full bg-[hsl(var(--lime))]/[0.06] blur-[130px]" />
-      </div>
+    <section id="contact" className="section relative">
+      <div className="shell relative z-10">
+        <SectionHeading
+          eyebrow="07 — Contact"
+          title="Let's build"
+          accent="something"
+          lede="Open to internships and full-time roles. The fastest route is email — the form goes to the same inbox."
+        />
 
-      <div className="relative mx-auto w-full max-w-[104rem] px-5 sm:px-8">
-        <DrawLine />
-
-        <div className="py-16 lg:py-24">
-          <Rise>
-            <p className="meta mb-4">
-              <span className="text-[hsl(var(--lime))]">06</span> — Contact
-            </p>
-          </Rise>
-
-          <PosterLinesOnScroll
-            as="h2"
-            className="poster-xl"
-            lines={[
-              <span key="1">LET'S</span>,
-              <span key="2">BUILD</span>,
-              <span key="3" className="text-[hsl(var(--lime))]">
-                SOMETHING.
-              </span>,
-            ]}
-          />
-
-          <div className="mt-12 grid gap-12 lg:grid-cols-[0.45fr_0.55fr] lg:gap-16">
-            {/* Channels */}
-            <div>
-              <Rise delay={0.05}>
-                <p className="max-w-md font-grotesk text-[1.02rem] leading-[1.6] text-[hsl(var(--ash))]">
-                  I'm currently looking for internship opportunities and full-time roles.
-                  If you have a system that needs building properly, I'd like to hear about it.
-                </p>
-              </Rise>
-
-              <Rise delay={0.1} className="mt-8">
-                <button
-                  type="button"
-                  onClick={copyEmail}
-                  className="group flex w-full items-center justify-between gap-4 border-b border-[hsl(var(--edge))] pb-3 text-left transition-colors hover:border-[hsl(var(--lime))]"
-                  aria-label="Copy email address"
-                >
-                  <span className="min-w-0">
-                    <span className="meta block">Email</span>
-                    <span className="mt-1.5 block break-all font-grotesk text-[1.1rem] font-medium tracking-[-0.02em] text-[hsl(var(--chalk))] transition-colors group-hover:text-[hsl(var(--lime))] sm:text-[1.3rem]">
-                      {profile.email}
-                    </span>
-                  </span>
-                  <span className="shrink-0 text-[hsl(var(--fog))] transition-colors group-hover:text-[hsl(var(--lime))]">
-                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                  </span>
-                </button>
-              </Rise>
-
-              <Rise delay={0.15} className="mt-6">
-                <a
-                  href={`tel:${profile.phoneHref}`}
-                  className="group flex items-center justify-between gap-4 border-b border-[hsl(var(--edge))] pb-3 transition-colors hover:border-[hsl(var(--lime))]"
-                >
-                  <span>
-                    <span className="meta block">Phone</span>
-                    <span className="mt-1.5 block font-grotesk text-[1.05rem] font-medium tracking-[-0.02em] text-[hsl(var(--chalk))]">
-                      {profile.phone}
-                    </span>
-                  </span>
-                  <span className="font-mono text-[0.56rem] uppercase tracking-[0.14em] text-[hsl(var(--fog))]">
-                    Call
-                  </span>
-                </a>
-              </Rise>
-
-              <Rise delay={0.2} className="mt-8">
-                <p className="meta mb-3">Elsewhere</p>
-                <div className="grid grid-cols-2 gap-px border border-[hsl(var(--edge))] bg-[hsl(var(--edge))]">
-                  {socials.map((s) => {
-                    const Icon = iconMap[s.label as keyof typeof iconMap];
-                    return (
-                      <a
-                        key={s.label}
-                        href={s.href}
-                        target={s.href.startsWith("http") ? "_blank" : undefined}
-                        rel="noopener noreferrer"
-                        className="group flex items-center gap-2.5 bg-[hsl(var(--carbon))] px-3.5 py-3 transition-colors hover:bg-[hsl(var(--carbon-2))]"
-                      >
-                        <Icon className="h-3.5 w-3.5 shrink-0 text-[hsl(var(--fog))] transition-colors group-hover:text-[hsl(var(--lime))]" />
-                        <span className="min-w-0">
-                          <span className="block font-mono text-[0.6rem] uppercase tracking-[0.12em] text-[hsl(var(--chalk))]">
-                            {s.label}
-                          </span>
-                          <span className="block truncate font-mono text-[0.55rem] text-[hsl(var(--fog))]">
-                            {s.handle}
-                          </span>
-                        </span>
-                      </a>
-                    );
-                  })}
-                </div>
-              </Rise>
-            </div>
-
-            {/* Form */}
-            <Rise delay={0.1}>
-              <form
-                onSubmit={onSubmit}
-                noValidate
-                className="border border-[hsl(var(--edge))] bg-[hsl(var(--carbon-2))] p-6 sm:p-8"
+        <div className="mt-12 grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
+          {/* ── Channels ──────────────────────────────────── */}
+          <div className="flex flex-col gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
+              className="card p-5"
+            >
+              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-[hsl(var(--violet))]">
+                Email
+              </p>
+              <a
+                href={`mailto:${profile.email}`}
+                className="mt-2 block break-all text-[0.95rem] font-medium text-white transition-colors hover:text-[hsl(var(--violet))]"
               >
-                <p className="meta mb-6">Or send a note</p>
+                {profile.email}
+              </a>
+              <button
+                type="button"
+                onClick={copyEmail}
+                className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-[hsl(0_0%_100%/0.14)] px-2.5 py-1.5 text-[0.72rem] font-medium text-[hsl(var(--ash))] transition-colors hover:border-[hsl(var(--violet))]/60 hover:text-white"
+              >
+                {copied ? (
+                  <>
+                    <Check className="h-3 w-3 text-emerald-400" /> Copied
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-3 w-3" /> Copy address
+                  </>
+                )}
+              </button>
+            </motion.div>
 
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <Field
-                    id="ct-name"
-                    label="Name"
-                    value={form.name}
-                    onChange={(v) => setForm((f) => ({ ...f, name: v }))}
-                    placeholder="Your name"
-                    autoComplete="name"
-                  />
-                  <Field
-                    id="ct-email"
-                    label="Email"
-                    type="email"
-                    value={form.email}
-                    onChange={(v) => setForm((f) => ({ ...f, email: v }))}
-                    placeholder="you@example.com"
-                    autoComplete="email"
-                    invalid={form.email.length > 0 && !validEmail}
-                    hint={form.email.length > 0 && !validEmail ? "Enter a valid email" : undefined}
-                  />
-                </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: EASE_OUT_EXPO, delay: 0.06 }}
+              className="card p-5"
+            >
+              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-[hsl(var(--violet))]">
+                Direct
+              </p>
+              <ul className="mt-3 space-y-2.5">
+                <li>
+                  <a
+                    href={`tel:${profile.phoneHref}`}
+                    className="flex items-center gap-2.5 text-[0.88rem] text-[hsl(var(--ash))] transition-colors hover:text-white"
+                  >
+                    <Phone className="h-3.5 w-3.5 text-[hsl(var(--fog))]" />
+                    {profile.phone}
+                  </a>
+                </li>
+                <li className="flex items-center gap-2.5 text-[0.88rem] text-[hsl(var(--ash))]">
+                  <MapPin className="h-3.5 w-3.5 text-[hsl(var(--fog))]" />
+                  {profile.location}
+                </li>
+                <li>
+                  <a
+                    href={`mailto:${profile.email}`}
+                    className="flex items-center gap-2.5 text-[0.88rem] text-[hsl(var(--ash))] transition-colors hover:text-white"
+                  >
+                    <Mail className="h-3.5 w-3.5 text-[hsl(var(--fog))]" />
+                    Reply within a day or two
+                  </a>
+                </li>
+              </ul>
+            </motion.div>
 
-                <div className="mt-5">
-                  <div className="mb-2 flex items-baseline justify-between">
-                    <label htmlFor="ct-message" className="meta">
-                      Message
-                    </label>
-                    <span className="font-mono text-[0.55rem] text-[hsl(var(--fog))]">
-                      {form.message.length}/1000
-                    </span>
-                  </div>
-                  <textarea
-                    id="ct-message"
-                    rows={5}
-                    maxLength={1000}
-                    value={form.message}
-                    onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
-                    placeholder="What are you building, and where is it stuck?"
-                    className="w-full resize-none border border-[hsl(var(--edge))] bg-[hsl(var(--carbon))] px-3.5 py-3 text-[0.88rem] leading-relaxed text-[hsl(var(--chalk))] transition-colors placeholder:text-[hsl(var(--fog))] focus:border-[hsl(var(--lime))] focus-visible:outline-none"
-                  />
-                </div>
-
-                <AnimatePresence>
-                  {status === "error" && (
-                    <motion.p
-                      role="alert"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="mt-4 flex items-start gap-2 overflow-hidden border-l-2 border-[hsl(var(--lime))] pl-3 text-[0.78rem] text-[hsl(var(--ash))]"
-                    >
-                      <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                      {error}
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-
-                <button
-                  type="submit"
-                  disabled={!ready}
-                  className={cn(
-                    "group mt-6 inline-flex w-full items-center justify-center gap-2.5 px-6 py-3.5 font-mono text-[0.64rem] uppercase tracking-[0.18em] transition-all duration-300",
-                    ready
-                      ? "bg-[hsl(var(--lime))] text-[hsl(var(--carbon))] hover:shadow-[0_14px_44px_-14px_hsl(76_100%_57%/0.6)]"
-                      : "cursor-not-allowed border border-[hsl(var(--edge))] text-[hsl(var(--fog))]",
-                  )}
-                >
-                  {status === "sending" ? (
-                    <>
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                      Sending
-                    </>
-                  ) : (
-                    <>
-                      Send message
-                      <Send className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
-                    </>
-                  )}
-                </button>
-
-                <p className="mt-3 text-center font-mono text-[0.55rem] tracking-[0.06em] text-[hsl(var(--fog))]">
-                  Goes directly to my inbox.
-                </p>
-              </form>
-            </Rise>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: EASE_OUT_EXPO, delay: 0.12 }}
+              className="card flex items-center gap-3 p-5"
+            >
+              <span className="relative flex h-2 w-2 shrink-0">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              </span>
+              <p className="text-[0.85rem] text-[hsl(var(--ash))]">{profile.availability}</p>
+            </motion.div>
           </div>
+
+          {/* ── Form ──────────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.65, ease: EASE_OUT_EXPO, delay: 0.08 }}
+            className="card p-5 sm:p-6"
+          >
+            <form onSubmit={onSubmit} noValidate>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field
+                  id="cf-name"
+                  label="Name"
+                  value={form.name}
+                  onChange={(v) => setForm((f) => ({ ...f, name: v }))}
+                  placeholder="Your name"
+                  autoComplete="name"
+                />
+                <Field
+                  id="cf-email"
+                  label="Email"
+                  type="email"
+                  value={form.email}
+                  onChange={(v) => setForm((f) => ({ ...f, email: v }))}
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  invalid={form.email.length > 0 && !emailValid}
+                  hint={form.email.length > 0 && !emailValid ? "Enter a valid email" : undefined}
+                />
+              </div>
+
+              <div className="mt-4">
+                <div className="mb-1.5 flex items-baseline justify-between">
+                  <label
+                    htmlFor="cf-message"
+                    className="text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-[hsl(var(--ash))]"
+                  >
+                    Message
+                  </label>
+                  <span className="font-mono text-[0.62rem] text-[hsl(var(--fog))]">
+                    {form.message.length}/1000
+                  </span>
+                </div>
+                <textarea
+                  id="cf-message"
+                  rows={6}
+                  maxLength={1000}
+                  value={form.message}
+                  onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+                  placeholder="What are you building, and where is it stuck?"
+                  className="field resize-none"
+                />
+              </div>
+
+              <AnimatePresence>
+                {status === "error" && (
+                  <motion.p
+                    role="alert"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-4 flex items-start gap-2 overflow-hidden text-[0.8rem] text-red-300"
+                  >
+                    <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    {error}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+
+              <button
+                type="submit"
+                disabled={!canSend}
+                className={cn(
+                  "btn mt-5 w-full",
+                  canSend ? "btn-primary" : "btn-ghost cursor-not-allowed opacity-55",
+                )}
+              >
+                {status === "sending" ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Sending
+                  </>
+                ) : (
+                  <>
+                    Send message
+                    <Send className="h-3.5 w-3.5" />
+                  </>
+                )}
+              </button>
+
+              <p className="mt-3 text-center text-[0.7rem] text-[hsl(var(--fog))]">
+                Goes straight to my inbox. Or email{" "}
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="text-[hsl(var(--violet))] underline-offset-2 hover:underline"
+                >
+                  directly
+                </a>
+                .
+              </p>
+            </form>
+          </motion.div>
         </div>
       </div>
+
+      <p aria-live="polite" className="sr-only">
+        {status === "sent" ? "Your message was sent." : ""}
+      </p>
 
       <SentDialog open={status === "sent"} onClose={() => setStatus("idle")} />
     </section>
@@ -299,7 +303,10 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="meta mb-2 block">
+      <label
+        htmlFor={id}
+        className="mb-1.5 block text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-[hsl(var(--ash))]"
+      >
         {label}
       </label>
       <input
@@ -311,15 +318,10 @@ function Field({
         autoComplete={autoComplete}
         aria-invalid={invalid || undefined}
         aria-describedby={hint ? `${id}-hint` : undefined}
-        className={cn(
-          "h-11 w-full border bg-[hsl(var(--carbon))] px-3.5 text-[0.88rem] text-[hsl(var(--chalk))] transition-colors placeholder:text-[hsl(var(--fog))] focus-visible:outline-none",
-          invalid
-            ? "border-[hsl(var(--lime))]"
-            : "border-[hsl(var(--edge))] focus:border-[hsl(var(--lime))]",
-        )}
+        className="field"
       />
       {hint && (
-        <p id={`${id}-hint`} className="mt-1.5 text-[0.68rem] text-[hsl(var(--lime))]">
+        <p id={`${id}-hint`} className="mt-1.5 text-[0.7rem] text-red-300">
           {hint}
         </p>
       )}
@@ -329,12 +331,15 @@ function Field({
 
 function SentDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const panelRef = useRef<HTMLDivElement>(null);
-  const btnRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useScrollLock(open);
 
   useEffect(() => {
     if (!open) return;
+    // remember what had focus so it can be restored on dismissal
     const previous = document.activeElement as HTMLElement | null;
-    btnRef.current?.focus();
+    closeRef.current?.focus();
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -343,7 +348,7 @@ function SentDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
       }
       if (e.key !== "Tab" || !panelRef.current) return;
       const nodes = panelRef.current.querySelectorAll<HTMLElement>(
-        'button, [href], input, textarea, [tabindex]:not([tabindex="-1"])',
+        'button, [href], [tabindex]:not([tabindex="-1"])',
       );
       if (!nodes.length) return;
       const first = nodes[0];
@@ -358,11 +363,8 @@ function SentDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
     };
 
     document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
       previous?.focus();
     };
   }, [open, onClose]);
@@ -377,7 +379,7 @@ function SentDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
           exit={{ opacity: 0 }}
         >
           <div
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/75 backdrop-blur-sm"
             onClick={onClose}
             aria-hidden="true"
           />
@@ -386,37 +388,32 @@ function SentDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
             role="dialog"
             aria-modal="true"
             aria-labelledby="sent-title"
-            initial={{ opacity: 0, y: 20, scale: 0.97 }}
+            initial={{ opacity: 0, y: 18, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.98 }}
-            transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-            className="relative w-full max-w-sm border border-[hsl(var(--edge))] bg-[hsl(var(--carbon-2))] p-7"
+            transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
+            className="card relative w-full max-w-sm p-6 text-center"
           >
             <button
-              ref={btnRef}
+              ref={closeRef}
               type="button"
               onClick={onClose}
               aria-label="Close"
-              className="absolute right-3 top-3 text-[hsl(var(--fog))] transition-colors hover:text-[hsl(var(--chalk))]"
+              className="absolute right-3 top-3 text-[hsl(var(--fog))] transition-colors hover:text-white"
             >
               <X className="h-4 w-4" />
             </button>
 
-            <p className="font-mono text-[0.58rem] uppercase tracking-[0.2em] text-[hsl(var(--lime))]">
-              Received
-            </p>
-            <h2 id="sent-title" className="mt-3 font-grotesk text-[1.6rem] font-semibold tracking-[-0.03em]">
-              Message sent.
+            <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-emerald-500/15 text-emerald-400">
+              <Check className="h-5 w-5" />
+            </span>
+            <h2 id="sent-title" className="mt-4 text-[1.25rem] font-bold">
+              Message sent
             </h2>
-            <p className="mt-2 text-[0.86rem] leading-relaxed text-[hsl(var(--ash))]">
-              Thanks for reaching out — I'll reply as soon as I can.
+            <p className="mt-2 text-[0.87rem] leading-relaxed text-[hsl(var(--ash))]">
+              Thanks for reaching out — I&apos;ll reply as soon as I can.
             </p>
-
-            <button
-              type="button"
-              onClick={onClose}
-              className="mt-6 w-full bg-[hsl(var(--lime))] px-4 py-3 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-[hsl(var(--carbon))] transition-opacity hover:opacity-90"
-            >
+            <button type="button" onClick={onClose} className="btn btn-primary mt-5 w-full">
               Close
             </button>
           </motion.div>

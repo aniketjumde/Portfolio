@@ -1,178 +1,101 @@
-import { motion } from "framer-motion";
-import { DrawLine, PosterLinesOnScroll, Rise } from "@/components/motion/text";
+import { AnimatePresence, motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { TechIcon } from "@/components/ui/tech-icon";
 import { EASE_OUT_EXPO } from "@/components/motion/easing";
-import { skillGroups } from "@/data/skills";
-import { achievements } from "@/data/credentials";
-import { SkillsSphere } from "@/components/experience/skills-sphere";
-import { useState } from "react";
+import { skillFilters, skills, type SkillCategory } from "@/data/skills";
 import { cn } from "@/lib/utils";
 
+type Filter = (typeof skillFilters)[number]["id"];
+
 /**
- * Skills as an explorable object, not a list of bars.
+ * Filterable technology grid.
  *
- * The sphere carries the breadth; the ledger underneath carries the detail.
- * Selecting a category dims the others so a recruiter can scan vertically.
- * No proficiency percentages — the résumé makes no such claims.
+ * Mirrors the reference's skill section: pill filters, then a grid of glass
+ * tiles that lift and glow on hover. Filtering is instant and keyboard
+ * operable, and the tiles are laid out 2-up on phones through 5-up on desktop
+ * rather than being a compressed desktop grid.
  */
 export function Skills() {
-  const [focus, setFocus] = useState<string | null>(null);
+  const [filter, setFilter] = useState<Filter>("All");
+
+  const visible = useMemo(
+    () => (filter === "All" ? skills : skills.filter((s) => s.category === (filter as SkillCategory))),
+    [filter],
+  );
 
   return (
-    <section id="skills" className="relative overflow-hidden">
-      <div className="mx-auto w-full max-w-[104rem] px-5 sm:px-8">
-        <DrawLine />
+    <section id="skills" className="section relative">
+      <div className="shell relative z-10">
+        <SectionHeading
+          eyebrow="03 — Skills"
+          title="Technical"
+          accent="toolkit"
+          lede="Every technology here comes straight from my résumé. No proficiency percentages — just what I actually work with."
+        />
 
-        <div className="py-16 lg:py-24">
-          <div className="grid gap-6 lg:grid-cols-[0.55fr_0.45fr] lg:items-end">
-            <div>
-              <Rise>
-                <p className="meta mb-4">
-                  <span className="text-[hsl(var(--lime))]">03</span> — Technical expertise
-                </p>
-              </Rise>
-              <PosterLinesOnScroll
-                as="h2"
-                className="poster-lg"
-                lines={[
-                  <span key="1">THE</span>,
-                  <span key="2" className="outline-type">
-                    TOOLKIT.
-                  </span>,
-                ]}
-              />
-            </div>
-            <Rise delay={0.1}>
-              <p className="max-w-sm font-grotesk text-[0.98rem] leading-relaxed text-[hsl(var(--ash))]">
-                Six categories, taken directly from my résumé. No proficiency scores —
-                just what I actually work with.
-              </p>
-            </Rise>
-          </div>
-
-          {/* ── Sphere + legend ─────────────────────────────── */}
-          <div className="mt-12 grid items-center gap-8 lg:grid-cols-[1fr_0.85fr] lg:gap-4">
-            <div className="relative">
-              <SkillsSphere className="mx-auto h-[19rem] w-full max-w-[26rem] sm:h-[24rem] lg:h-[27rem] lg:max-w-none" />
-            </div>
-
-            <div>
-              <p className="meta mb-3">Categories</p>
-              <ul className="border-t border-[hsl(var(--edge))]">
-                {skillGroups.map((g, i) => (
-                  <li key={g.id} className="border-b border-[hsl(var(--edge))]">
-                    <button
-                      type="button"
-                      onMouseEnter={() => setFocus(g.id)}
-                      onMouseLeave={() => setFocus(null)}
-                      onFocus={() => setFocus(g.id)}
-                      onBlur={() => setFocus(null)}
-                      onClick={() => setFocus((cur) => (cur === g.id ? null : g.id))}
-                      aria-pressed={focus === g.id}
-                      className="flex w-full items-baseline gap-3 py-2.5 text-left"
-                    >
-                      <span className="font-mono text-[0.55rem] text-[hsl(var(--fog))]">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span
-                        className={cn(
-                          "font-grotesk text-[0.95rem] font-medium tracking-[-0.015em] transition-colors duration-300",
-                          focus === g.id
-                            ? "text-[hsl(var(--lime))]"
-                            : "text-[hsl(var(--chalk))]",
-                        )}
-                      >
-                        {g.title}
-                      </span>
-                      <span className="ml-auto font-mono text-[0.55rem] tabular-nums text-[hsl(var(--fog))]">
-                        {String(g.items.length).padStart(2, "0")}
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-3 font-mono text-[0.55rem] uppercase leading-relaxed tracking-[0.14em] text-[hsl(var(--fog))]">
-                Hover or tap a category to isolate it below
-              </p>
-            </div>
-          </div>
-
-          {/* ── Ledger ──────────────────────────────────────── */}
-          <div className="mt-4 grid gap-px border border-[hsl(var(--edge))] bg-[hsl(var(--edge))] sm:grid-cols-2 lg:grid-cols-3">
-            {skillGroups.map((group, i) => (
-              <motion.div
-                key={group.id}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ delay: i * 0.05, duration: 0.6, ease: EASE_OUT_EXPO }}
+        {/* Filters */}
+        <div
+          role="tablist"
+          aria-label="Filter skills by category"
+          className="mt-9 flex flex-wrap items-center justify-center gap-2"
+        >
+          {skillFilters.map((f) => {
+            const selected = filter === f.id;
+            return (
+              <button
+                key={f.id}
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                onClick={() => setFilter(f.id)}
                 className={cn(
-                  "group relative bg-[hsl(var(--carbon))] p-6 transition-all duration-500",
-                  focus === null || focus === group.id
-                    ? "opacity-100 hover:bg-[hsl(var(--carbon-2))]"
-                    : "opacity-35",
+                  "rounded-full border px-4 py-1.5 text-[0.8rem] font-medium transition-all duration-300",
+                  selected
+                    ? "border-[hsl(var(--violet))] bg-[hsl(var(--violet))] text-white shadow-[0_6px_22px_-8px_hsl(var(--violet))]"
+                    : "border-[hsl(0_0%_100%/0.14)] bg-white/[0.03] text-[hsl(var(--ash))] hover:border-[hsl(var(--violet))]/60 hover:text-white",
                 )}
               >
-                <span
-                  aria-hidden="true"
-                  className="absolute right-0 top-0 h-6 w-6 origin-top-right scale-0 bg-[hsl(var(--lime))] transition-transform duration-400 group-hover:scale-100"
-                  style={{ clipPath: "polygon(100% 0, 0 0, 100% 100%)" }}
-                />
-
-                <div className="flex items-baseline justify-between">
-                  <span className="font-mono text-[0.55rem] tracking-[0.16em] text-[hsl(var(--fog))]">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="font-mono text-[0.55rem] tabular-nums text-[hsl(var(--lime))]">
-                    {String(group.items.length).padStart(2, "0")}
-                  </span>
-                </div>
-
-                <h3 className="mt-4 font-grotesk text-[1.18rem] font-semibold tracking-[-0.025em] transition-colors duration-300 group-hover:text-[hsl(var(--lime))]">
-                  {group.title}
-                </h3>
-                <p className="mt-1 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-[hsl(var(--fog))]">
-                  {group.note}
-                </p>
-
-                <ul className="mt-4 space-y-1.5">
-                  {group.items.map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-baseline gap-2 text-[0.83rem] leading-snug text-[hsl(var(--ash))]"
-                    >
-                      <span className="h-px w-2.5 shrink-0 translate-y-[-0.15em] bg-[hsl(var(--edge))]" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* ── Achievement strip ───────────────────────────── */}
-          <div className="mt-6 grid gap-px border border-[hsl(var(--edge))] bg-[hsl(var(--edge))] sm:grid-cols-3">
-            {achievements.map((a, i) => (
-              <motion.div
-                key={a.title}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ delay: i * 0.08, duration: 0.6 }}
-                className="bg-[hsl(var(--carbon-2))] p-5"
-              >
-                <p className="poster text-[2rem] leading-none text-[hsl(var(--lime))]">
-                  {a.metric}
-                </p>
-                <p className="mt-2.5 text-[0.84rem] font-medium leading-snug text-[hsl(var(--chalk))]">
-                  {a.title}
-                </p>
-                <p className="mt-1.5 text-[0.76rem] leading-relaxed text-[hsl(var(--fog))]">
-                  {a.detail}
-                </p>
-              </motion.div>
-            ))}
-          </div>
+                {f.label}
+              </button>
+            );
+          })}
         </div>
+
+        {/* Grid */}
+        <div className="mt-8">
+          <motion.ul
+            layout
+            className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+          >
+            <AnimatePresence mode="popLayout">
+              {visible.map((skill) => (
+                <motion.li
+                  key={skill.name}
+                  layout
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.92 }}
+                  transition={{ duration: 0.32, ease: EASE_OUT_EXPO }}
+                  className="skill-tile"
+                >
+                  <TechIcon skill={skill} />
+                  <span className="text-center text-[0.8rem] font-semibold leading-tight text-white">
+                    {skill.name}
+                  </span>
+                  <span className="text-center text-[0.6rem] uppercase tracking-[0.08em] text-[hsl(var(--fog))]">
+                    {skill.note}
+                  </span>
+                </motion.li>
+              ))}
+            </AnimatePresence>
+          </motion.ul>
+        </div>
+
+        <p className="mt-6 text-center text-[0.78rem] text-[hsl(var(--fog))]">
+          {visible.length} {visible.length === 1 ? "technology" : "technologies"}
+          {filter !== "All" && ` in ${filter}`} · {skills.length} in total
+        </p>
       </div>
     </section>
   );

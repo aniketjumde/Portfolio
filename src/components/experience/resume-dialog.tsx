@@ -86,16 +86,16 @@ export function ResumeDialog({ open, onClose }: { open: boolean; onClose: () => 
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 14, scale: 0.99 }}
             transition={{ duration: 0.42, ease: EASE_OUT_EXPO }}
-            className="relative flex h-full max-h-[92vh] w-full max-w-3xl flex-col border border-[hsl(var(--edge))] bg-[hsl(var(--carbon-2))]"
+            className="relative flex h-full max-h-[92vh] w-full max-w-3xl flex-col border border-[hsl(0_0%_100%/0.1)] bg-[hsl(var(--ink-2))]"
           >
             {/* toolbar */}
-            <div className="flex items-center justify-between gap-3 border-b border-[hsl(var(--edge))] px-4 py-3">
+            <div className="flex items-center justify-between gap-3 border-b border-[hsl(0_0%_100%/0.1)] px-4 py-3">
               <div className="flex min-w-0 items-center gap-2.5">
-                <FileText className="h-3.5 w-3.5 shrink-0 text-[hsl(var(--lime))]" />
+                <FileText className="h-3.5 w-3.5 shrink-0 text-[hsl(var(--violet))]" />
                 <div className="min-w-0">
                   <p
                     id="resume-title"
-                    className="truncate font-mono text-[0.6rem] uppercase tracking-[0.16em] text-[hsl(var(--chalk))]"
+                    className="truncate font-mono text-[0.6rem] uppercase tracking-[0.16em] text-white"
                   >
                     Aniket Jumde — Résumé
                   </p>
@@ -109,7 +109,7 @@ export function ResumeDialog({ open, onClose }: { open: boolean; onClose: () => 
                 <a
                   href={profile.resumeUrl}
                   download
-                  className="hidden items-center gap-1.5 bg-[hsl(var(--lime))] px-3 py-1.5 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-[hsl(var(--carbon))] transition-opacity hover:opacity-90 sm:inline-flex"
+                  className="hidden items-center gap-1.5 bg-[hsl(var(--violet))] px-3 py-1.5 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-white transition-opacity hover:opacity-90 sm:inline-flex"
                 >
                   <Download className="h-3 w-3" />
                   Download
@@ -119,7 +119,7 @@ export function ResumeDialog({ open, onClose }: { open: boolean; onClose: () => 
                   type="button"
                   onClick={onClose}
                   aria-label="Close résumé"
-                  className="grid h-8 w-8 place-items-center border border-[hsl(var(--edge))] text-[hsl(var(--ash))] transition-colors hover:border-[hsl(var(--chalk))]/40 hover:text-[hsl(var(--chalk))]"
+                  className="grid h-8 w-8 place-items-center border border-[hsl(0_0%_100%/0.1)] text-[hsl(var(--ash))] transition-colors hover:border-white/40 hover:text-white"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -127,7 +127,7 @@ export function ResumeDialog({ open, onClose }: { open: boolean; onClose: () => 
             </div>
 
             {/* document */}
-            <div className="relative min-h-0 flex-1 overflow-hidden bg-[hsl(var(--carbon))]">
+            <div className="relative min-h-0 flex-1 overflow-hidden bg-[hsl(var(--ink))]">
               {/* Desktop/tablet: the real PDF, browser-native. */}
               <iframe
                 src={`${profile.resumeUrl}#view=FitH`}
@@ -137,7 +137,7 @@ export function ResumeDialog({ open, onClose }: { open: boolean; onClose: () => 
 
               {/* Small screens: inline PDFs are unreliable, so offer the file. */}
               <div className="flex h-full flex-col items-center justify-center gap-5 p-8 text-center sm:hidden">
-                <FileText className="h-10 w-10 text-[hsl(var(--lime))]" />
+                <FileText className="h-10 w-10 text-[hsl(var(--violet))]" />
                 <div>
                   <p className="font-grotesk text-[1.05rem] font-semibold">Aniket Jumde</p>
                   <p className="mt-1 font-mono text-[0.56rem] uppercase tracking-[0.14em] text-[hsl(var(--fog))]">
@@ -149,14 +149,14 @@ export function ResumeDialog({ open, onClose }: { open: boolean; onClose: () => 
                     href={profile.resumeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-[hsl(var(--lime))] px-4 py-3 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-[hsl(var(--carbon))]"
+                    className="bg-[hsl(var(--violet))] px-4 py-3 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-white"
                   >
                     Open in a new tab
                   </a>
                   <a
                     href={profile.resumeUrl}
                     download
-                    className="border border-[hsl(var(--edge))] px-4 py-3 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-[hsl(var(--chalk))]"
+                    className="border border-[hsl(0_0%_100%/0.1)] px-4 py-3 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-white"
                   >
                     Download PDF
                   </a>

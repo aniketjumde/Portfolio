@@ -1,16 +1,16 @@
 import { useCallback, useState } from "react";
 import { Preloader } from "@/components/experience/preloader";
-import { CustomCursor } from "@/components/experience/cursor";
-import { CursorGlow } from "@/components/experience/cursor-glow";
+import { Backdrop } from "@/components/experience/backdrop";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { Hero } from "@/components/sections/hero";
-import { Work } from "@/components/sections/work";
 import { About } from "@/components/sections/about";
+import { Projects } from "@/components/sections/projects";
 import { Skills } from "@/components/sections/skills";
 import { Experience } from "@/components/sections/experience";
-import { Contact } from "@/components/sections/contact";
 import { Credentials } from "@/components/sections/credentials";
+import { Profiles } from "@/components/sections/profiles";
+import { Contact } from "@/components/sections/contact";
 import { ResumeProvider } from "@/hooks/use-resume";
 
 export default function Home() {
@@ -19,32 +19,32 @@ export default function Home() {
 
   return (
     <ResumeProvider>
-    <div className="noise relative min-h-screen bg-[hsl(var(--carbon))] text-[hsl(var(--chalk))]">
-      <Preloader onDone={onDone} />
-      <CustomCursor />
-      <CursorGlow />
+      <div className="relative min-h-screen bg-[hsl(var(--ink))] text-white">
+        <Preloader onDone={onDone} />
+        <Backdrop />
 
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[300] focus:bg-[hsl(var(--lime))] focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:text-[hsl(var(--carbon))]"
-      >
-        Skip to content
-      </a>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[300] focus:rounded-lg focus:bg-[hsl(var(--violet))] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+        >
+          Skip to content
+        </a>
 
-      <Nav />
+        <Nav />
 
-      <main id="main" className="relative z-[2]">
-        <Hero ready={ready} />
-        <Work />
-        <About />
-        <Skills />
-        <Experience />
-        <Credentials />
-        <Contact />
-      </main>
+        <main id="main" className="relative z-10">
+          <Hero ready={ready} />
+          <About />
+          <Projects />
+          <Skills />
+          <Experience />
+          <Credentials />
+          <Profiles />
+          <Contact />
+        </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
     </ResumeProvider>
   );
 }

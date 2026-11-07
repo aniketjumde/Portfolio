@@ -1,103 +1,101 @@
 # Aniket Jumde — Portfolio
 
-A dark-editorial portfolio for **Aniket Jumde**, Java developer and problem solver.
-Built with React 19, Vite 7, Tailwind CSS v4 and Framer Motion.
+A dark, violet-accented developer portfolio for **Aniket Jumde**, software
+developer and Java engineer. Built with React 19, Vite 7, Tailwind CSS v4 and
+Framer Motion.
 
 **Live:** https://aniketjumdeportfolio.vercel.app/
 
 ---
 
-## The concept
+## Design language
 
-Dark editorial meets creative technology. Instead of the default developer-portfolio
-language — navy gradients, glass cards, a grid of identical thumbnails — this treats the
-page like a printed poster that happens to be interactive.
+Modelled on the reference portfolio's structure and feel: a near-black field
+(`#0b0b0b`), one violet signal colour (`#a855f7`), translucent glass cards with
+soft glow, a faint 56px grid, and centred section headings with an accented
+clause.
 
-Deep charcoal stock (`#0B0B0A`), **electric lime** (`#D4FF38`) as the single signal colour,
-off-white type, and hairline rules at 1.44:1 so structure reads without shouting. A 72px
-grid and a 3.5% noise screen sit under the content to give it grain. Ambient blooms drift
-behind the hero and the closing section.
+**Inter** carries everything — 800/900 for headings, 400/500 for body — with
+**JetBrains Mono** for numerals, dates and small labels. That pairing keeps the
+page feeling engineered rather than decorative.
 
-Type carries the identity: **Anton** at poster scale for display, **Bricolage Grotesque**
-for headings, **Inter Tight** for body copy, and **JetBrains Mono** for the metadata that
-frames every section.
-
-The result reads as a designed object, not a template.
+Ambient violet blooms drift behind the content on an 18–26s cycle; every
+animation is gated behind `prefers-reduced-motion`.
 
 ---
 
-## Structure
+## Sections
 
 | # | Section | What it does |
 |---|---|---|
-| — | Floating nav | Monogram, condensed-on-scroll bar, sliding active indicator, scroll-progress hairline, résumé viewer |
-| 01 | Hero | Poster headline, availability status, standfirst, magnetic CTAs, metric rail, socials |
-| 02 | Selected work | Full editorial spreads, alternating sides — each project with two vector screens, contribution, stack and links |
-| 03 | About | Sticky fact ledger, narrative, focus list, education, technology ticker |
-| 04 | Skills | Rotating word-sphere over a six-category ledger; isolate a category by hover, tap or keyboard |
-| 05 | Experience & education | Four-stage rail with a scroll-linked lime fill |
-| 06 | Credentials | Achievement rail and the full certification ledger, grouped by issuer |
-| 07 | Contact | Copy-to-clipboard email, social index, validated form with focus-trapped confirmation dialog |
-| — | Footer | Oversized sign-off, index columns, contact block, colophon |
+| — | Nav | Fixed bar, blurs in on scroll, active-link indicator, scroll-progress hairline, mobile sheet |
+| — | Hero | Availability pill, reference-style intro line, name, typewriter role, CTAs, socials, metric strip |
+| 01 | About | Narrative, four pillar cards, full technology marquee |
+| 02 | Projects | Alternating full-width cards, each with a vector application screen, stack and live links |
+| 03 | Skills | Filterable icon grid — All / Languages / Frontend / Backend / Databases / Tools |
+| 04 | Experience | Centre rail that fills with the accent as you scroll, alternating entries |
+| 05 | Certifications | Achievement rail plus the full ledger, grouped by issuer |
+| 06 | Profiles | LinkedIn, GitHub, LeetCode, Email cards |
+| 07 | Contact | Channels, copy-to-clipboard email, validated form with focus-managed confirmation |
+| — | Footer | Brand, navigation, contact block, résumé download |
 
 ---
 
 ## Content provenance
 
-Every fact on the site is transcribed from `public/AniketCV.pdf`. Nothing is invented.
+Every fact is transcribed from `public/AniketCV.pdf`. Nothing is invented.
 
-- **Projects** — the two systems listed under *Professional Experience & Projects*
-  (Online Examination System, Student Management System).
-- **Links** — only `Student-Managment-System` has a public repository, so only that
-  project shows a source link. The examination system is labelled "Demo on request".
-  No demo URL is fabricated.
-- **Certifications** — grouped by subject and issuer exactly as the résumé lists them,
-  rather than inventing individual certificate titles.
-- **Metrics** — 1+ years Java, 150+ LeetCode, 5★ HackerRank in C/C++/Java/SQL, 8.22 CGPA.
-- **HackerRank profile** — the résumé references one but doesn't state the handle, so no
-  guessed URL is included.
-
-If a number changes on the résumé, change it in `src/data/` and it updates everywhere.
+- **Projects** — the two systems under *Professional Experience & Projects*.
+- **Links** — only the Student Management System has a public repo **and** a
+  documented live deployment (per its own README). The examination system is
+  labelled "Demo on request"; no URL is fabricated.
+- **Certifications** — grouped by subject and issuer exactly as the résumé
+  lists them. No certificate IDs, issue dates or verify links are invented,
+  and the section says so.
+- **HackerRank** — the résumé claims 5★ ratings but names no profile handle,
+  so no HackerRank card is shown rather than guessing a URL.
+- **Metrics** — 1+ years Java, 150+ LeetCode, 5★ HackerRank, 8.22 CGPA.
 
 ### Data files
 
 ```
 src/data/profile.ts      identity, summary, metrics, socials, navigation
-src/data/work.ts         the two projects, contribution bullets, stack
-src/data/skills.ts       six skill groups
-src/data/timeline.ts     education and applied-practice timeline
-src/data/credentials.ts  certifications, achievements
+src/data/work.ts         the two projects
+src/data/skills.ts       icon grid + grouped view
+src/data/timeline.ts     education and applied practice
+src/data/credentials.ts  certifications and achievements
 ```
 
 ---
 
-## Signature interactions
+## Implementation notes
 
-- **Preloader** — 0→100 counter with a BUILD / SHIP / REFINE word cycle, then a wipe up.
-  Runs once per session and is skipped entirely for reduced-motion users.
-- **Custom cursor** — an instant dot plus a lagging ring that grows over interactive
-  elements. Desktop/fine-pointer only; never applied to touch.
-- **Pointer-following project preview** — the work section floats a scaled project plate
-  that trails the cursor and tilts with horizontal position.
-- **Scroll-linked rail** — the experience timeline fills in step with scroll progress.
-- **Magnetic CTAs** — hero buttons lean toward the pointer by a few pixels.
-- **Masked line reveals** — every display heading rises out of an overflow mask.
+**Icons are inlined.** Paths from Simple Icons (CC0) live in
+`components/ui/tech-icons.tsx` — about 20 paths — rather than pulling the 16 MB
+`simple-icons` package or hitting a CDN. They cannot 404 and add no dependency.
+Skills with no honest brand mark render as a typed monogram instead of borrowing
+a logo.
 
-All motion uses `transform` / `opacity` / `clip-path` only — nothing triggers layout.
-Every effect is gated behind `prefers-reduced-motion`.
+**Project screens are vector.** `components/ui/project-mocks.tsx` rebuilds the
+real application interfaces from the actual JSP sources, so labels and field
+names are authentic. They stay sharp at any DPI and ship zero image bytes.
+
+**The résumé opens in a viewer.** A shared dialog renders the PDF in a native
+`<iframe>` — no pdf.js. On phones, where in-frame PDFs are unreliable, it swaps
+to explicit open/download actions.
 
 ---
 
 ## Accessibility
 
-- Body text verified at **WCAG AA (≥ 4.5:1)**; the faintest token (`--fog`) sits at
-  **4.66:1** on the lightest dark surface
-- Skip link, a single `<h1>`, landmark regions, ordered heading levels
-- Keyboard focus is always visible — 2px lime ring, 3px offset
-- Icon-only controls carry `aria-label`; the mobile sheet exposes `aria-expanded`
-- Contact dialog traps focus, closes on Escape, restores focus on dismissal
-- Form fields are label-associated with `aria-invalid` / `aria-describedby` hints
-- Decorative layers are `aria-hidden`; pinch-zoom is not blocked
+- Every text colour verified at **WCAG AA** on the page background:
+  white 19.7:1, ash 9.6:1, fog 5.7:1, violet 5.0:1
+- Single `<h1>`, skip link, landmark regions, labelled nav
+- Skills filters are real `role="tab"` buttons with `aria-selected`
+- Form fields are label-associated with `aria-invalid` / `aria-describedby`
+- Focus rings visible on every interactive element
+- `prefers-reduced-motion` disables the preloader, drifting blooms and all
+  transitions
 
 ---
 
@@ -109,11 +107,10 @@ Every effect is gated behind `prefers-reduced-motion`.
 | Build | Vite 7 |
 | Styling | Tailwind CSS v4 (`@tailwindcss/vite`) |
 | Motion | Framer Motion 12 |
-| Icons | Lucide + hand-drawn brand SVGs |
-| Routing | Wouter |
+| Icons | Lucide + inlined brand paths |
 | API | Vercel serverless function + Nodemailer |
 
-Production bundle: 43 kB CSS, ~411 kB JS across three chunks (react / motion / app).
+Production bundle: ~55 kB CSS, ~451 kB JS across three chunks.
 
 ---
 
@@ -124,8 +121,8 @@ npm install
 npm run dev      # http://localhost:5173
 ```
 
-`npm run dev` also boots a small adapter (`script/dev-api.ts`) so the real contact handler in
-`api/contact.ts` runs locally.
+`npm run dev` also boots `script/dev-api.ts` so the real contact handler runs
+locally.
 
 ### Contact form
 
@@ -136,24 +133,15 @@ EMAIL_USER=you@gmail.com
 EMAIL_PASS=your-16-char-gmail-app-password
 ```
 
-Generate one at <https://myaccount.google.com/apppasswords> (2-Step Verification required).
-Without these the API returns a clear 500 rather than failing silently.
-
-### Résumé viewer
-
-Every "Résumé" control opens one shared dialog (`components/experience/resume-dialog.tsx`)
-that renders the PDF in a native `<iframe>` — no pdf.js, nothing to bundle. On phones,
-where in-frame PDFs are unreliable, it swaps to explicit open/download actions instead of
-showing an empty box. The provider is mounted once in `pages/home.tsx`, so three buttons
-share a single document load.
+Without these the API returns a clear 500 rather than silently succeeding.
 
 ### Assets
 
-`public/og.png` is the social card. `public/og.svg` is its source; this sandbox has no SVG
-rasteriser, so the PNG is generated directly with Pillow from the same design tokens:
+`public/og.png` is generated from `public/og.svg` by Pillow (this environment
+has no SVG rasteriser):
 
 ```bash
-pip install pillow numpy
+pip install pillow numpy fonttools brotli
 python3 tools/render-og.py
 ```
 
@@ -170,9 +158,9 @@ python3 tools/render-og.py
 
 ## Deploying
 
-Import the repo at <https://vercel.com/new> (Vite preset), add `EMAIL_USER` and `EMAIL_PASS`
-under environment variables, deploy. `vercel.json` handles the SPA rewrite, immutable asset
-caching and baseline security headers.
+Import the repo at <https://vercel.com/new>, select the Vite preset, add
+`EMAIL_USER` and `EMAIL_PASS`, deploy. `vercel.json` handles the SPA rewrite,
+immutable asset caching and baseline security headers.
 
 ---
 
